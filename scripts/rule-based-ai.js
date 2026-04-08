@@ -1,35 +1,39 @@
 const canvas = document.getElementById("draw");
 const ctx = canvas.getContext("2d");
 const resultEl = document.getElementById("result");
-const previewCanvas = document.getElementById("normalizedPreview");
-const previewCtx = previewCanvas.getContext("2d");
 
 // Set canvas sizes
 canvas.width = canvas.offsetWidth;
 canvas.height = canvas.offsetHeight;
-previewCanvas.width = 64;
-previewCanvas.height = 64;
 
 // Drawing history for undo
 let history = [];
 
+let placeholderImage = null;
+
 // White background
 resetCanvas();
-
-// Initialize preview
-previewCtx.fillStyle = "white";
-previewCtx.fillRect(0, 0, previewCanvas.width, previewCanvas.height);
 
 // Simple drawing
 let drawing = false;
 let strokeMoved = false;
 
+let hasDrawn = false;
+
 canvas.addEventListener("mousedown", (e) => {
+  if (!hasDrawn) {
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    hasDrawn = true;
+  }
+
   drawing = true;
   strokeMoved = false;
+
   const rect = canvas.getBoundingClientRect();
   const x = e.clientX - rect.left;
   const y = e.clientY - rect.top;
+
   ctx.beginPath();
   ctx.moveTo(x, y);
 });
@@ -54,28 +58,25 @@ canvas.addEventListener("mouseleave", () => {
 
 canvas.addEventListener("mousemove", draw);
 
-document.getElementById("resetBtn").addEventListener("click", () => {
+document.getElementById("reset-btn").addEventListener("click", () => {
+  hasDrawn = false;
   resetCanvas();
   resultEl.innerHTML = "";
-  previewCtx.fillStyle = "white";
-  previewCtx.fillRect(0, 0, previewCanvas.width, previewCanvas.height);
 });
 
-document.getElementById("undoBtn").addEventListener("click", () => {
+document.getElementById("undo-btn").addEventListener("click", () => {
   if (history.length > 1) {
     history.pop();
-    ctx.putImageData(history[history.length - 1], 0, 0);
+    const previousState = history[history.length - 1];
+    ctx.putImageData(previousState, 0, 0);
+
+    hasDrawn = !isSameImageData(previousState, placeholderImage);
   }
 });
 
 document.getElementById("classifyBtn").addEventListener("click", () => {
   const normCanvas = normalizeCanvas(ctx, canvas.width, canvas.height, 64);
   const normCtx = normCanvas.getContext("2d");
-
-  // Show normalized image in fixed preview canvas
-  previewCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
-  previewCtx.drawImage(normCanvas, 0, 0);
-
   const features = extractFeatures(normCtx, 64, 64);
   const prediction = classifyByRules(features);
 
@@ -97,25 +98,34 @@ document.getElementById("classifyBtn").addEventListener("click", () => {
     <strong>Prediction:</strong> ${prediction.label}<br>
     <strong>Why:</strong><br>
     ${prediction.reasons.map(r => `- ${r}`).join("<br>")}<br><br>
-    <strong>Features:</strong><br>
-    aspectRatio: ${pad(features.aspectRatio)}<br>
-    density: ${pad(features.density)}<br>
-    middleHRatio: ${pad(features.middleHRatio)}<br>
-    topRatio: ${pad(features.topRatio)}<br>
-    bottomRatio: ${pad(features.bottomRatio)}<br>
-    leftRatio: ${pad(features.leftRatio)}<br>
-    rightRatio: ${pad(features.rightRatio)}<br>
-    verticalSymmetry: ${pad(features.verticalSymmetry)}<br>
-    horizontalSymmetry: ${pad(features.horizontalSymmetry)}<br>
-    colVariation: ${features.colVariation != null ? pad(features.colVariation) : "n/a"}
   `;
 });
 
 function resetCanvas() {
   ctx.fillStyle = "white";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = "grey";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.font = "1.8rem Caroni, sans-serif";
+  ctx.fillText("Draw here!", canvas.width / 2, canvas.height / 2);
+
   ctx.beginPath();
-  history = [ctx.getImageData(0, 0, canvas.width, canvas.height)];
+
+  const initialState = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  placeholderImage = initialState;
+  history = [initialState];
+}
+
+function isSameImageData(img1, img2) {
+  if (!img1 || !img2 || img1.data.length !== img2.data.length) return false;
+
+  for (let i = 0; i < img1.data.length; i++) {
+    if (img1.data[i] !== img2.data[i]) return false;
+  }
+
+  return true;
 }
 
 function draw(e) {
@@ -125,7 +135,7 @@ function draw(e) {
   const x = e.clientX - rect.left;
   const y = e.clientY - rect.top;
 
-  ctx.lineWidth = 8;
+  ctx.lineWidth = 5;
   ctx.lineCap = "round";
   ctx.lineJoin = "round";
   ctx.strokeStyle = "black";

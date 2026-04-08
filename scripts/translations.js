@@ -13,7 +13,13 @@ const translations = {
         classifierTitle: "Image classifier",
         classifierText: "It's very good at spotting patterns in pictures. But does it really understand them?",
         rulesTitle: "Rule-based AI",
-        rulesText: "It never guesses - it only follows rules. But what happens outside them?"
+        rulesText: "It never guesses - it only follows rules. But what happens outside them?",
+        challengesTitle: "Challenges",
+        challengeSun: "Draw a sun",
+        challengeHouse: "Draw a house",
+        challengeFish: "Draw a fish",
+        challengeNote: "Challenges are complete when the AI recognizes the drawn image.",
+        classifyBtn: "Classify",
     },
     da: {
         siteTitle: "AI Legepladsen",
@@ -29,7 +35,13 @@ const translations = {
         classifierTitle: "Billedklassifikator",
         classifierText: "Den er meget god til at genkende mønstre i billeder. Men forstår den dem egentlig?",
         rulesTitle: "Regelbaseret AI",
-        rulesText: "Den gætter aldrig - den følger kun regler. Men hvad sker der uden for dem?"
+        rulesText: "Den gætter aldrig - den følger kun regler. Men hvad sker der uden for dem?",
+        challengesTitle: "Udfordringer",
+        challengeSun: "Tegn en sol",
+        challengeHouse: "Tegn et hus",
+        challengeFish: "Tegn en fisk",
+        challengeNote: "Udfordringer er fuldført, når AI'en genkender det tegnede billede.",
+        classifyBtn: "Klassificer",
     }
 };
 

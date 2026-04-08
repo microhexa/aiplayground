@@ -12,6 +12,7 @@
 }
 
 #rule-based-ai {
+    padding-top: 50px;
     flex-direction: row;
     gap: 100px;
     justify-content: center;
@@ -20,7 +21,7 @@
 .button-row {
     display: flex;
     gap: 10px;
-    margin-bottom: 10px;
+    width: 100%;
 }
 
 .draw-area {
@@ -48,4 +49,36 @@
     flex-wrap: wrap;
     width: 100%;
     margin-top: 20px;
+}
+
+#result {
+    background-color: white;
+    border: 2px solid #131313;
+    width: 20%;
+    font-family: Caroni;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 1.6rem;
+    list-style: none;
+}
+
+.header {
+    display: grid;
+    grid-template-columns: 120px 1fr 120px;
+    align-items: center;
+    width: 100%;
+}
+
+.header h1 {
+    margin: 0;
+    text-align: center;
+}
+
+.header-left {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.header-right {
+    /* empty on purpose, balances the left side */
 }

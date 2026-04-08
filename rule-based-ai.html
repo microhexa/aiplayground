@@ -9,70 +9,60 @@
 </head>
 <body>
   <div class="page">
-    <div class="topbar">
-        <img src="./images/butterfly colored.png" alt="AI Playground Logo" class="logo">
-        <h1 data-i18n="siteTitle">The AI Playground</h1>
-        <div class="divider vertical">|</div>
-        <div id="menu-home" data-i18n="menuOption1" class="menuoption active">Home</div>
-        <div id="menu-about" data-i18n="menuOption2" class="menuoption">About</div>
-        <div id="menu-curious" data-i18n="menuOption3" class="menuoption">For the curious</div>
-        <div class="lang-toggle">
-            <button id="lang-en" class="active">
-                <img src="./images/flags/uk_color.png" alt="English">
-            </button>
-            <div class="divider">/</div>
-            <button id="lang-da">
-                <img src="./images/flags/dk_color.png" alt="Dansk">
+    <div class="header">
+        <div class="header-left">
+            <button id="return-btn" class="arrow-btn">
+                <span class="arrow">&larr;</span>
             </button>
         </div>
+        <h1>Rule-based AI</h1>
+        <div class="header-right"></div>
     </div>
     <div id="rule-based-ai" class="focus">
         <div id="challenges">
-            <h2>Challenges</h2>
+            <h2 data-i18n="challengesTitle">Challenges</h2>
             <ul class="challenge-list">
                 <li>
                     <label>
                         <input type="checkbox" id="challenge-sun" disabled>
-                        Draw a sun.
+                        <div data-i18n="challengeSun">Draw a sun.</div>
                     </label>
                 </li>
                 <li>
                     <label>
                         <input type="checkbox" id="challenge-house" disabled>
-                        Draw a house.
+                        <div data-i18n="challengeHouse">Draw a house.</div>
                     </label>
                 </li>
                 <li>
                     <label>
                         <input type="checkbox" id="challenge-fish" disabled>
-                        Draw a fish.
+                        <div data-i18n="challengeFish">Draw a fish.</div>
                     </label>
                 </li>
             </ul>
-            <div class="challenge-note">
+            <div class="challenge-note" data-i18n="challengeNote">
                 Challenges are complete when the AI recognizes the drawn image.
             </div>
         </div>
         <div class="draw-panel">
             <div class="button-row">
-                <button id="resetBtn">Reset</button>
-                <button id="undoBtn">Undo</button>
+                <button id="reset-btn">Reset</button>
+                <button id="undo-btn">Undo</button>
             </div>
             <canvas id="draw"></canvas>
-            <button id="classifyBtn">Classify</button>
-        </div>
-        <div class="preview-panel">
-            <h3>Normalized image</h3>
-            <canvas id="normalizedPreview"></canvas>
+            <div class="button-row">
+                <button id="classifyBtn" data-i18n="classifyBtn">Classify</button>
+                <button id="settings">+</button>
+            </div>
         </div>
         <div id="result"></div>
     </div>
     
   </div>
   
-
+  <script src="scripts/translations.js"></script>
   <script src="scripts/script.js"></script>
   <script src="scripts/rule-based-ai.js"></script>
-  <script src="scripts/translations.js"></script>
 </body>
 </html>
