@@ -2,6 +2,8 @@ const canvas = document.getElementById("draw");
 const ctx = canvas.getContext("2d");
 const resultElTop = document.getElementById("result-top");
 const resultElBot = document.getElementById("result-bottom");
+const detectedTextEl = document.getElementById("result-detected");
+const whyTextEl = document.getElementById("result-why");
 
 // Set canvas sizes
 canvas.width = canvas.offsetWidth;
@@ -14,6 +16,7 @@ let placeholderImage = null;
 
 // White background
 resetCanvas();
+setResultPlaceholder();
 
 // Simple drawing
 let drawing = false;
@@ -62,8 +65,7 @@ canvas.addEventListener("mousemove", draw);
 document.getElementById("reset-btn").addEventListener("click", () => {
   hasDrawn = false;
   resetCanvas();
-  resultElTop.innerHTML = "";
-  resultElBot.innerHTML = "";
+  setResultPlaceholder();
 });
 
 document.getElementById("undo-btn").addEventListener("click", () => {
@@ -83,28 +85,27 @@ document.getElementById("classifyBtn").addEventListener("click", () => {
   const prediction = classifyByRules(features);
 
   const challengeMap = {
-        sun: "challenge-sun",
-        house: "challenge-house",
-        fish: "challenge-fish"
+        labelSun: "challenge-sun",
+        labelHouse: "challenge-house",
+        labelFish: "challenge-fish"
     };
 
-    const label = prediction.label.toLowerCase();
-
-    if (challengeMap[label]) {
-        document.getElementById(challengeMap[label]).checked = true;
+    if (challengeMap[prediction.label]) {
+        document.getElementById(challengeMap[prediction.label]).checked = true;
     }
 
   const pad = (value) => value != null ? value.toFixed(2) : "n/a";
 
-  resultElTop.innerHTML = `
-    <h2>Prediction:</h2> ${prediction.label}<br>
-    `;
-  resultElBot.innerHTML = `
-    <h2>Why:</h2>
+  detectedTextEl.dataset.i18n = prediction.label;
+  detectedTextEl.textContent = t(prediction.label);
+
+  whyTextEl.innerHTML = `
     <ul>
-    ${prediction.reasons.map(r => `<li>${r}</li>`).join("")}
+    ${prediction.reasons.map(reason => `<li data-i18n="${reason}">${t(reason)}</li>`).join("")}
     </ul>
     `;
+
+  applyTranslations();
 });
 
 function resetCanvas() {
@@ -115,13 +116,20 @@ function resetCanvas() {
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   ctx.font = "1.8rem Caroni, sans-serif";
-  ctx.fillText("Draw here!", canvas.width / 2, canvas.height / 2);
+  ctx.fillText(t("drawHere"), canvas.width / 2, canvas.height / 2);
 
   ctx.beginPath();
 
   const initialState = ctx.getImageData(0, 0, canvas.width, canvas.height);
   placeholderImage = initialState;
   history = [initialState];
+}
+
+function setResultPlaceholder() {
+  detectedTextEl.removeAttribute("data-i18n");
+  detectedTextEl.textContent = "-";
+  whyTextEl.removeAttribute("data-i18n");
+  whyTextEl.textContent = "-";
 }
 
 function isSameImageData(img1, img2) {
@@ -348,7 +356,7 @@ function classifyByRules(f) {
   const reasons = [];
 
   if (f.empty) {
-    return { label: "Nothing drawn", reasons: ["No ink pixels detected"] };
+    return { label: "labelNothing", reasons: ["reasonNoInk"] };
   }
 
   // Fish-like
@@ -361,12 +369,12 @@ function classifyByRules(f) {
     f.colVariation < 0.3 &&
     Math.abs(f.leftRatio - f.rightRatio) > 0.08
   ) {
-    reasons.push("Drawing is wider than tall");
-    reasons.push("Most ink lies in the middle horizontal band");
-    reasons.push("Top and bottom contain relatively little ink");
-    reasons.push("Left and right sides are imbalanced");
-    reasons.push("This fits a body-and-tail shape");
-    return { label: "Fish", reasons };
+    reasons.push("reasonFishWidth");
+    reasons.push("reasonFishMiddle");
+    reasons.push("reasonFishTopBottomLow");
+    reasons.push("reasonFishImbalance");
+    reasons.push("reasonFishBodyTail");
+    return { label: "labelFish", reasons };
   }
 
   // House-like
@@ -377,10 +385,10 @@ function classifyByRules(f) {
     f.aspectRatio > 0.7 &&
     f.aspectRatio < 1.4
   ) {
-    reasons.push("Much of the ink is in the middle and lower region");
-    reasons.push("Drawing is fairly vertically symmetric");
-    reasons.push("Overall proportions fit a house-like shape");
-    return { label: "House", reasons };
+    reasons.push("reasonHouseMidBottom");
+    reasons.push("reasonHouseSymmetric");
+    reasons.push("reasonHouseProportions");
+    return { label: "labelHouse", reasons };
   }
 
   // Sun-like
@@ -391,13 +399,13 @@ function classifyByRules(f) {
     f.verticalSymmetry > 0.75 &&
     f.horizontalSymmetry > 0.75
   ) {
-    reasons.push("Shape is roughly balanced");
-    reasons.push("Ink density is relatively sparse");
-    reasons.push("Drawing is symmetric both vertically and horizontally");
-    return { label: "Sun", reasons };
+    reasons.push("reasonSunBalanced");
+    reasons.push("reasonSunSparse");
+    reasons.push("reasonSunSymmetry");
+    return { label: "labelSun", reasons };
   }
 
-  reasons.push("No specific rule matched strongly");
-  reasons.push("Falling back to default class");
-  return { label: "Unknown doodle", reasons };
+  reasons.push("reasonDefaultNoMatch");
+  reasons.push("reasonDefaultFallback");
+  return { label: "labelUnknown", reasons };
 }
