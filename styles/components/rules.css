@@ -6,6 +6,7 @@
     align-items: center;
     justify-content: center;
     z-index: 1000;
+    font-family: Caroni, sans-serif;
 }
 
 .popup.hidden {
@@ -17,9 +18,8 @@
     border: 2px solid #131313;
     padding: 20px;
     min-width: 600px;
-    min-height: 500px;
+    height: 500px;
     box-sizing: border-box;
-    overflow-y: auto;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -29,5 +29,168 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
-    margin: 20px 0;
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+}
+
+.rule-card {
+    background: whitesmoke;
+    padding: 20px;
+}
+
+.rule-card ul {
+    margin: 10px 0 10px 0;
+}
+
+.rule-card {
+    background: whitesmoke;
+    padding: 16px 20px;
+    border: 2px solid #131313;
+    border-radius: 10px;
+}
+
+.rule-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.rule-title {
+    font-weight: 600;
+}
+
+.rule-details {
+    margin-top: 12px;
+}
+
+.rule-card ul {
+    margin: 0;
+    padding-left: 22px;
+}
+
+.rule-builder {
+    margin-top: 16px;
+    padding: 16px;
+    border: 2px solid #131313;
+    border-radius: 10px;
+    background: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.rule-builder.hidden {
+    display: none;
+}
+
+.rule-builder-block {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.rule-builder input,
+.rule-builder select {
+    font: inherit;
+    padding: 8px;
+    border: 2px solid #131313;
+    border-radius: 8px;
+}
+
+.rule-builder-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.rule-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.rule-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.rule-header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.rule-delete-btn,
+.rule-edit-btn,
+.rule-view-btn {
+    width: 60px;
+    min-height: 10px;
+    padding: 7px;
+    font-size: 0;
+    line-height: 0;
+}
+
+.rule-delete-btn {
+    background: #d83333;
+}
+
+.rule-card.dragging {
+    opacity: 0.5;
+}
+
+.rule-card.drag-over {
+    outline: 3px dashed #975aa3;
+    outline-offset: 4px;
+}
+
+.rule-drag-handle {
+    border: none;
+    background: transparent;
+    color: #131313;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: grab;
+    padding: 0 4px;
+    display: flex;
+    align-items: center;
+}
+
+.rule-drag-handle:active {
+    cursor: grabbing;
+}
+
+.rule-card.dragging {
+    opacity: 0.5;
+}
+
+.rule-card.drag-over {
+    outline: 3px dashed #975aa3;
+    outline-offset: 4px;
+}
+
+.rule-edit-btn svg,
+.rule-view-btn svg,
+.rule-delete-btn svg {
+    display: block;
+    width: 60%;
+    fill: white;
+    stroke: white;
+    stroke-width: 0.4px;
+}
+
+#add-rule-btn {
+    flex-shrink: 0;
+    margin-top: 12px;
+}
+
+.rule-builder input:disabled,
+.rule-builder select:disabled {
+    background: #ececec;
+    color: #555;
+    cursor: not-allowed;
 }

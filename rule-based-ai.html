@@ -23,6 +23,21 @@
             <button id="close-rules-btn"><div>X</div></button>
             <h2>Rules</h2>
             <div id="rules-list"></div>
+            <div id="rule-builder" class="rule-builder hidden">
+                <h3 id="rule-builder-title">Make your own rule</h3>
+
+                <label>
+                    Name your label:
+                    <input type="text" id="new-rule-name" maxlength="20" placeholder="e.g. Rocket">
+                </label>
+
+                <div id="rule-builder-blocks"></div>
+
+                <div class="rule-builder-actions">
+                    <button id="save-rule-btn">Save</button>
+                    <button id="cancel-rule-btn" class="crit">Cancel</button>
+                </div>
+            </div>
             <button id="add-rule-btn"><div>+</div></button>
         </div>
     </div>

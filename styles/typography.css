@@ -30,11 +30,14 @@ h2 {
 .intro {
     max-width: 850px;
     text-align: left;
-    font-size: 1.2rem;
     color: #333;
     line-height: 1.5;
 }
 
 button {
     font-family: Caroni, sans-serif;
+}
+
+.rule-card {
+    font-size: 1.6rem;
 }

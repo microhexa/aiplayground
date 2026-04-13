@@ -115,12 +115,23 @@ document.getElementById("classify-btn").addEventListener("click", () => {
     document.getElementById(challengeMap[prediction.label]).checked = true;
   }
 
-  detectedTextEl.dataset.i18n = prediction.label;
-  detectedTextEl.textContent = t(prediction.label);
+  if (prediction.label.startsWith("label")) {
+    detectedTextEl.dataset.i18n = prediction.label;
+    detectedTextEl.textContent = t(prediction.label);
+  } else {
+    detectedTextEl.removeAttribute("data-i18n");
+    detectedTextEl.textContent = prediction.label;
+  }
 
   whyTextEl.innerHTML = `
     <ul>
-      ${prediction.reasons.map(reason => `<li data-i18n="${reason}">${t(reason)}</li>`).join("")}
+      ${prediction.reasons.map(reason => {
+        if (reason.startsWith("reason")) {
+          return `<li data-i18n="${reason}">${t(reason)}</li>`;
+        } else {
+          return `<li>${reason}</li>`;
+        }
+      }).join("")}
     </ul>
   `;
 
@@ -369,56 +380,21 @@ function extractFeatures(ctx, width, height) {
 }
 
 function classifyByRules(f) {
-  const reasons = [];
-
   if (f.empty) {
     return { label: "labelNothing", reasons: ["reasonNoInk"] };
   }
 
-  if (
-    f.aspectRatio > 1.2 &&
-    f.middleHRatio > 0.45 &&
-    f.topRatio < 0.35 &&
-    f.bottomRatio < 0.35 &&
-    f.verticalSymmetry < 0.9 &&
-    f.colVariation < 0.3 &&
-    Math.abs(f.leftRatio - f.rightRatio) > 0.08
-  ) {
-    reasons.push("reasonFishWidth");
-    reasons.push("reasonFishMiddle");
-    reasons.push("reasonFishTopBottomLow");
-    reasons.push("reasonFishImbalance");
-    reasons.push("reasonFishBodyTail");
-    return { label: "labelFish", reasons };
+  for (const rule of window.ruleDefinitions) {
+    if (ruleMatches(f, rule)) {
+      return {
+        label: rule.label,
+        reasons: rule.reasons
+      };
+    }
   }
 
-  if (
-    f.bottomRatio > 0.30 &&
-    f.middleHRatio > 0.30 &&
-    f.verticalSymmetry > 0.75 &&
-    f.aspectRatio > 0.7 &&
-    f.aspectRatio < 1.4
-  ) {
-    reasons.push("reasonHouseMidBottom");
-    reasons.push("reasonHouseSymmetric");
-    reasons.push("reasonHouseProportions");
-    return { label: "labelHouse", reasons };
-  }
-
-  if (
-    f.aspectRatio > 0.85 &&
-    f.aspectRatio < 1.3 &&
-    f.density < 0.18 &&
-    f.verticalSymmetry > 0.75 &&
-    f.horizontalSymmetry > 0.75
-  ) {
-    reasons.push("reasonSunBalanced");
-    reasons.push("reasonSunSparse");
-    reasons.push("reasonSunSymmetry");
-    return { label: "labelSun", reasons };
-  }
-
-  reasons.push("reasonDefaultNoMatch");
-  reasons.push("reasonDefaultFallback");
-  return { label: "labelUnknown", reasons };
+  return {
+    label: "labelUnknown",
+    reasons: ["reasonDefaultNoMatch", "reasonDefaultFallback"]
+  };
 }

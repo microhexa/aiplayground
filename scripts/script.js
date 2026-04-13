@@ -26,7 +26,10 @@ const aboutMenu = document.getElementById("menu-about");
 const homeMenu = document.getElementById("menu-home");
 const curiousMenu = document.getElementById("menu-curious");
 const startRuleBasedBtn = document.getElementById("start-rule-based");
+const startImageClassifierBtn = document.getElementById("start-image-classifier");
 const returnBtn = document.getElementById("return-btn");
+const classifierCard = document.getElementById("slot-center");
+const IMAGE_CLASSIFIER_UNLOCK_KEY = "imageClassifierUnlocked";
 
 if (aboutMenu) {
     aboutMenu.onclick = () => {
@@ -58,9 +61,27 @@ if (startRuleBasedBtn) {
     };
 }
 
+if (startImageClassifierBtn) {
+    startImageClassifierBtn.onclick = () => {
+        window.location.href = "image-classifier.html";
+    };
+}
+
 if (returnBtn) {
     returnBtn.onclick = () => {
+        const currentPath = window.location.pathname;
+        if (currentPath.endsWith("rule-based-ai.html")) {
+            localStorage.setItem(IMAGE_CLASSIFIER_UNLOCK_KEY, "true");
+        }
         window.location.href = "index.html";
+    }
+}
+
+if (classifierCard) {
+    const isUnlocked = localStorage.getItem(IMAGE_CLASSIFIER_UNLOCK_KEY) === "true";
+    classifierCard.classList.toggle("locked", !isUnlocked);
+    if (startImageClassifierBtn) {
+        startImageClassifierBtn.hidden = !isUnlocked;
     }
 }
 
