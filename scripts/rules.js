@@ -2,6 +2,7 @@ let draggedRuleId = null;
 
 const rulesBtn = document.getElementById("rules-btn");
 const rulesPopup = document.getElementById("rules-popup");
+const rulesPopupContent = rulesPopup?.querySelector(".popup-content");
 const closeRulesBtn = document.getElementById("close-rules-btn");
 const rulesList = document.getElementById("rules-list");
 
@@ -13,18 +14,26 @@ const saveRuleBtn = document.getElementById("save-rule-btn");
 const cancelRuleBtn = document.getElementById("cancel-rule-btn");
 const newRuleNameInput = document.getElementById("new-rule-name");
 
+function setRuleBuilderOpen(isOpen) {
+  if (!rulesPopupContent) return;
+  rulesPopupContent.classList.toggle("builder-open", isOpen);
+}
+
 rulesBtn.addEventListener("click", () => {
   renderRules();
+  resetRuleBuilder();
   rulesPopup.classList.remove("hidden");
 });
 
 closeRulesBtn.addEventListener("click", () => {
+  resetRuleBuilder();
   rulesPopup.classList.add("hidden");
 });
 
 addRuleBtn.addEventListener("click", () => {
   renderRuleBuilder();
   ruleBuilder.classList.remove("hidden");
+  setRuleBuilderOpen(true);
 });
 
 cancelRuleBtn.addEventListener("click", () => {
@@ -106,6 +115,7 @@ function populateRuleBuilderFromRule(rule, readOnly = false) {
   renderRuleBuilder();
 
   ruleBuilder.classList.remove("hidden");
+  setRuleBuilderOpen(true);
   newRuleNameInput.value = rule.name;
   ruleBuilder.dataset.editingRuleId = readOnly ? "" : rule.id;
   ruleBuilder.dataset.readOnly = readOnly ? "true" : "false";
@@ -165,6 +175,7 @@ function renderRuleBuilder() {
 
 function resetRuleBuilder() {
   ruleBuilder.classList.add("hidden");
+  setRuleBuilderOpen(false);
   ruleBuilder.dataset.editingRuleId = "";
   ruleBuilder.dataset.readOnly = "false";
   newRuleNameInput.value = "";

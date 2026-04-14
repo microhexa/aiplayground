@@ -71,7 +71,6 @@
   margin-bottom: 0;
   padding-left: 8px;
   position: relative;
-  z-index: 2;
 }
 
 .tab-btn {
@@ -80,23 +79,36 @@
   color: #131313;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  padding: 12px 22px 14px;
-  transform: translateY(2px);
+  padding: 12px 22px 24px;
+  transform: translateY(18px);
   box-shadow: none;
+  position: relative;
+  z-index: 0;
 }
 
 .tab-btn.active {
   background: white;
   color: #131313;
   border-bottom-color: white;
-  transform: translateY(0);
+  transform: translateY(10px);
+  cursor: default;
+  z-index: 2;
+}
+
+.tab-btn.active:hover {
+  transform: translateY(10px);
+  box-shadow: none;
+}
+
+.tab-btn:not(.active):not(:disabled):hover {
+  transform: translateY(10px);
 }
 
 .tab-btn:disabled {
   opacity: 0.55;
   cursor: not-allowed;
   box-shadow: none;
-  transform: none;
+  transform: translateY(18px);
 }
 
 .tab-panel {

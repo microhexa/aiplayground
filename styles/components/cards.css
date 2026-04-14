@@ -1,11 +1,12 @@
 .card {
     position: relative;
     flex: 1;
-    height: 220px;
+    min-height: 240px;
     border: #131313 solid 2px;
     padding: 28px;
     display: flex;
     flex-direction: column;
+    gap: 10px;
     background: rgba(255,255,255,0.94);
     color: #111111;
     transform-style: preserve-3d;
@@ -15,7 +16,6 @@
 
 .card h2 {
     margin: 0;
-    margin-bottom: 10px;
 }
 
 .card p {

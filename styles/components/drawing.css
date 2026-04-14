@@ -14,3 +14,9 @@
     font-family: Caroni;
     font-size: 1.6rem;
 }
+
+#result-why ul {
+    margin: 0 0 20px 0;
+    padding: 0;
+    list-style-position: inside;
+}

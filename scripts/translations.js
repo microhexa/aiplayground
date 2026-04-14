@@ -57,7 +57,7 @@ const translations = {
         classifierTitle: "Billedklassifikator",
         classifierText: "Den er meget god til at genkende mønstre i billeder.",
         rulesTitle: "Regelbaseret AI",
-        rulesText: "Den gætter aldrig - den følger kun regler. Kan AI'en identificere, hvad du tegner?",
+        rulesText: "Den gætter aldrig - den følger kun regler. Kan AI'en se, hvad du tegner?",
         challengesTitle: "Udfordringer",
         challengeSun: "Tegn en sol",
         challengeHouse: "Tegn et hus",
