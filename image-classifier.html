@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>The AI Playground | Room 2</title>
+  <title>AI Legepladsen | Billedklassifikator</title>
   <link rel="icon" href="./images/butterfly colored.png">
   <link rel="stylesheet" href="./styles/main.css">
   <link rel="stylesheet" href="./styles/image-classifier.css">
@@ -22,26 +22,26 @@
 
     <div id="training-popup" class="popup hidden" aria-hidden="true">
       <div class="popup-content training-popup">
-        <h2>Training your model</h2>
-        <p>The selected doodles are being sent to the local backend and used to train a small image classifier.</p>
+        <h2 data-i18n="imageClassifierPopupTitle">Træning af din model</h2>
+        <p data-i18n="imageClassifierPopupIntro">De valgte doodles sendes til den lokale backend og bruges til at træne en lille billedklassifikator.</p>
 
         <div class="progress-shell" aria-hidden="true">
           <div id="training-progress" class="progress-fill"></div>
         </div>
 
-        <div id="training-status">Preparing training data...</div>
+        <div id="training-status" data-i18n="imageClassifierPreparingData">Forbereder træningsdata...</div>
 
         <div class="popup-metrics">
           <div class="popup-metric">
-            <span class="popup-metric-label">Classes</span>
+            <span class="popup-metric-label" data-i18n="imageClassifierPopupClasses">Klasser</span>
             <span id="training-classes" class="popup-metric-value">0</span>
           </div>
           <div class="popup-metric">
-            <span class="popup-metric-label">Samples</span>
+            <span class="popup-metric-label" data-i18n="imageClassifierPopupSamples">Eksempler</span>
             <span id="training-samples" class="popup-metric-value">0</span>
           </div>
           <div class="popup-metric">
-            <span class="popup-metric-label">Progress</span>
+            <span class="popup-metric-label" data-i18n="imageClassifierPopupProgress">Fremdrift</span>
             <span id="training-percent" class="popup-metric-value">0%</span>
           </div>
         </div>
@@ -51,21 +51,21 @@
     </div>
 
     <div id="image-classifier-room" class="focus tabs-shell">
-      <h1 class="panel-title">Image Classifier</h1>
-      <div class="tab-bar" role="tablist" aria-label="Image classifier steps">
-        <button id="training-tab" class="tab-btn active" type="button" role="tab" aria-selected="true" aria-controls="training-panel">Training</button>
-        <button id="testing-tab" class="tab-btn" type="button" role="tab" aria-selected="false" aria-controls="testing-panel" disabled>Testing</button>
+      <h1 class="panel-title" data-i18n="imageClassifierRoomTitle">Billedklassifikator</h1>
+      <div id="classifier-tab-bar" class="tab-bar" role="tablist" aria-label="Trin i billedklassifikatoren">
+        <button id="training-tab" class="tab-btn active" type="button" role="tab" aria-selected="true" aria-controls="training-panel" data-i18n="imageClassifierTrainingTab">Træning</button>
+        <button id="testing-tab" class="tab-btn" type="button" role="tab" aria-selected="false" aria-controls="testing-panel" data-i18n="imageClassifierTestingTab" disabled>Test</button>
       </div>
 
       <div id="training-panel" class="stage-layout tab-panel active" role="tabpanel" aria-labelledby="training-tab">
         <div class="selector-panel">
           <div class="tallbox">
-            <h2>Training</h2>
+            <h2 data-i18n="imageClassifierTrainingHeading">Træning</h2>
 
-            <div class="step-title">1. Choose classes</div>
+            <div class="step-title" data-i18n="imageClassifierChooseClasses">1. Vælg klasser</div>
             <div id="class-picker" class="class-picker"></div>
 
-            <div class="step-title">2. Choose doodles</div>
+            <div class="step-title" data-i18n="imageClassifierChooseDoodles">2. Vælg doodles</div>
 
             <div class="selection-summary">
               <span id="selection-count">0 classes selected</span>
@@ -75,22 +75,22 @@
             <div id="doodle-browser" class="doodle-browser"></div>
 
             <div class="train-actions">
-              <button id="train-model-btn">Train model</button>
-              <button id="clear-selection-btn" type="button">Clear</button>
+              <button id="train-model-btn" data-i18n="imageClassifierTrainModel">Træn model</button>
+              <button id="clear-selection-btn" type="button" data-i18n="imageClassifierClear">Ryd</button>
             </div>
           </div>
         </div>
 
         <div class="training-panel">
           <div class="tallbox">
-            <h2>Status</h2>
+            <h2 data-i18n="imageClassifierStatusHeading">Status</h2>
             <ul class="status-list">
-              <li><strong>State</strong><span id="model-state">Waiting for training</span></li>
-              <li><strong>Backend</strong><span id="model-backend">Not connected</span></li>
-              <li><strong>Last trained</strong><span id="model-trained-at">-</span></li>
+              <li><strong data-i18n="imageClassifierState">Status</strong><span id="model-state">Venter på træning</span></li>
+              <li><strong data-i18n="imageClassifierBackend">Backend</strong><span id="model-backend">Ikke forbundet</span></li>
+              <li><strong data-i18n="imageClassifierLastTrained">Sidst trænet</strong><span id="model-trained-at">-</span></li>
             </ul>
             <div id="selected-tags" class="model-tag-list"></div>
-            <p class="training-note">Training unlocks testing.</p>
+            <p class="training-note" data-i18n="imageClassifierTrainingUnlocks">Træning låser testen op.</p>
           </div>
         </div>
       </div>
@@ -98,19 +98,31 @@
       <div id="testing-panel" class="stage-layout tab-panel" role="tabpanel" aria-labelledby="testing-tab">
         <div class="draw-panel classifier-panel">
           <div id="canvas-card" class="canvas-card locked">
-            <h2>Test the model</h2>
-            <p id="canvas-helper">Train a model first. Then draw inside the canvas to see what your classifier predicts.</p>
+            <h2 data-i18n="imageClassifierTestHeading">Test modellen</h2>
+            <p id="canvas-helper">Træn en model først. Tegn derefter i feltet for at se, hvad din klassifikator forudsiger.</p>
 
             <div class="button-row">
-              <button id="reset-btn" class="crit" type="button">Reset</button>
-              <button id="undo-btn" type="button">Undo</button>
-              <button id="redo-btn" type="button">Redo</button>
+              <button id="reset-btn" class="crit" type="button" aria-label="Nulstil">
+                <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="m15.854,10.854l-3.146,3.146,3.146,3.146c.195.195.195.512,0,.707-.098.098-.226.146-.354.146s-.256-.049-.354-.146l-3.146-3.146-3.146,3.146c-.098.098-.226.146-.354.146s-.256-.049-.354-.146c-.195-.195-.195-.512,0-.707l3.146-3.146-3.146-3.146c-.195-.195-.195-.512,0-.707s.512-.195.707,0l3.146,3.146,3.146-3.146c.195-.195.512-.195.707,0s.195.512,0,.707Zm7.146-6.354c0,.276-.224.5-.5.5h-1.5c0,.015,0,.03-.002.046l-1.37,14.867c-.215,2.33-2.142,4.087-4.481,4.087h-6.272c-2.337,0-4.263-1.754-4.48-4.08l-1.392-14.873c-.001-.016-.002-.031-.002-.047h-1.5c-.276,0-.5-.224-.5-.5s.224-.5.5-.5h5.028c.25-2.247,2.16-4,4.472-4h2c2.312,0,4.223,1.753,4.472,4h5.028c.276,0,.5.224.5.5Zm-15.464-.5h8.928c-.243-1.694-1.704-3-3.464-3h-2c-1.76,0-3.221,1.306-3.464,3Zm12.462,1H4.002l1.387,14.826c.168,1.81,1.667,3.174,3.484,3.174h6.272c1.82,0,3.318-1.366,3.485-3.179l1.366-14.821Z"/>
+                </svg>
+              </button>
+              <button id="undo-btn" type="button" aria-label="Fortryd">
+                <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M24,12c0,6.617-5.383,12-12,12C5.553,24,.287,18.958,.011,12.521c-.012-.276,.202-.509,.478-.521,.271,.011,.509,.202,.521,.479,.252,5.9,5.08,10.521,10.99,10.521,6.065,0,11-4.935,11-11S18.065,1,12,1c-3.751,0-7.159,1.87-9.202,5H7.5c.276,0,.5,.224,.5,.5s-.224,.5-.5,.5H2.5c-.827,0-1.5-.673-1.5-1.5V.5c0-.276,.224-.5,.5-.5s.5,.224,.5,.5V5.399C4.232,2.019,7.931,0,12,0c6.617,0,12,5.383,12,12Z"/>
+                </svg>
+              </button>
+              <button id="redo-btn" type="button" aria-label="Gendan">
+                <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M23.989,12.521c-.275,6.437-5.542,11.479-11.989,11.479C5.383,24,0,18.617,0,12S5.383,0,12,0c4.04,0,7.789,2.066,10,5.414V.5c0-.276,.224-.5,.5-.5s.5,.224,.5,.5V5.5c0,.827-.673,1.5-1.5,1.5h-5c-.276,0-.5-.224-.5-.5s.224-.5,.5-.5h4.692C19.169,2.909,15.718,1,12,1,5.935,1,1,5.935,1,12s4.935,11,11,11c5.91,0,10.737-4.621,10.99-10.521,.012-.275,.246-.477,.521-.479,.276,.013,.49,.245,.478,.521Z"/>
+                </svg>
+              </button>
             </div>
 
             <canvas id="draw" width="420" height="420"></canvas>
 
             <div class="button-row">
-              <button id="classify-btn" type="button">Test model</button>
+              <button id="classify-btn" type="button" data-i18n="imageClassifierTestModel">Test model</button>
             </div>
           </div>
         </div>
@@ -118,16 +130,16 @@
         <div class="insight-panel">
           <div id="result" class="tallbox">
             <div id="result-top">
-              <h2>Prediction</h2>
+              <h2 data-i18n="imageClassifierPrediction">Forudsigelse</h2>
               <div id="prediction-label" class="result-highlight">-</div>
-              <div id="prediction-confidence" class="result-subtle">Draw in the canvas, then click Test model.</div>
+              <div id="prediction-confidence" class="result-subtle">Tegn i feltet, og klik derefter på Test model.</div>
             </div>
             <div id="result-bottom">
-              <h2>Model details</h2>
+              <h2 data-i18n="imageClassifierModelDetails">Modeldetaljer</h2>
               <ul class="status-list">
-                <li><strong>State</strong><span id="testing-model-state">Waiting for training</span></li>
-                <li><strong>Backend</strong><span id="testing-model-backend">Not connected</span></li>
-                <li><strong>Last trained</strong><span id="testing-model-trained-at">-</span></li>
+                <li><strong data-i18n="imageClassifierState">Status</strong><span id="testing-model-state">Venter på træning</span></li>
+                <li><strong data-i18n="imageClassifierBackend">Backend</strong><span id="testing-model-backend">Ikke forbundet</span></li>
+                <li><strong data-i18n="imageClassifierLastTrained">Sidst trænet</strong><span id="testing-model-trained-at">-</span></li>
               </ul>
               <div id="testing-selected-tags" class="model-tag-list"></div>
             </div>
@@ -143,7 +155,7 @@
     const doodleSections = [
       {
         id: "sun",
-        label: "Sun",
+        labelKey: "imageClassifierClassSun",
         datasetPath: "./images/full_binary_sun.bin",
         samples: Array.from({ length: 15 }, (_, index) => ({
           id: `sun-${index + 1}`,
@@ -152,7 +164,7 @@
       },
       {
         id: "fish",
-        label: "Fish",
+        labelKey: "imageClassifierClassFish",
         datasetPath: "./images/full_binary_fish.bin",
         samples: Array.from({ length: 15 }, (_, index) => ({
           id: `fish-${index + 1}`,
@@ -161,7 +173,7 @@
       },
       {
         id: "house",
-        label: "House",
+        labelKey: "imageClassifierClassHouse",
         datasetPath: "./images/full_binary_house.bin",
         samples: Array.from({ length: 15 }, (_, index) => ({
           id: `house-${index + 1}`,
@@ -170,7 +182,7 @@
       },
       {
         id: "animal-migration",
-        label: "Animal migration",
+        labelKey: "imageClassifierClassAnimalMigration",
         datasetPath: "./images/full_binary_animal migration.bin",
         samples: Array.from({ length: 15 }, (_, index) => ({
           id: `animal-migration-${index + 1}`,
@@ -183,13 +195,9 @@
       section.samples.map((sample) => ({
         ...sample,
         labelId: section.id,
-        label: section.label
+        label: getSectionLabel(section)
       }))
     );
-
-    const API_BASE = window.IMAGE_CLASSIFIER_API_BASE || "http://127.0.0.1:8000";
-    const TRAIN_ENDPOINT = API_BASE + "/image-classifier/train";
-    const PREDICT_ENDPOINT = API_BASE + "/image-classifier/predict";
 
     const classPicker = document.getElementById("class-picker");
     const doodleBrowser = document.getElementById("doodle-browser");
@@ -208,6 +216,9 @@
     const trainingClassesEl = document.getElementById("training-classes");
     const trainingSamplesEl = document.getElementById("training-samples");
     const trainingBackendNoteEl = document.getElementById("training-backend-note");
+    const resetBtn = document.getElementById("reset-btn");
+    const undoBtn = document.getElementById("undo-btn");
+    const redoBtn = document.getElementById("redo-btn");
     const canvasCard = document.getElementById("canvas-card");
     const canvasHelperEl = document.getElementById("canvas-helper");
     const selectedTagsEl = document.getElementById("selected-tags");
@@ -220,6 +231,7 @@
     const testingModelTrainedAtEl = document.getElementById("testing-model-trained-at");
     const predictionLabelEl = document.getElementById("prediction-label");
     const predictionConfidenceEl = document.getElementById("prediction-confidence");
+    const classifierTabBar = document.getElementById("classifier-tab-bar");
 
     const canvas = document.getElementById("draw");
     const ctx = canvas.getContext("2d");
@@ -235,12 +247,55 @@
     let trainingInterval = null;
     let trainingInProgress = false;
     let modelReady = false;
+    let trainedBrowserModel = null;
+    let trainingStatusKey = "imageClassifierPreparingData";
+    let predictionPlaceholderKey = "imageClassifierTrainAndDraw";
+    let canvasHelperKey = "imageClassifierTrainAndDraw";
+
+    function getSectionLabel(section) {
+      return t(section.labelKey);
+    }
+
+    function formatMessage(key, values = {}) {
+      return Object.entries(values).reduce((message, [name, value]) => (
+        message.replace(`{${name}}`, value)
+      ), t(key));
+    }
+
+    function updateDocumentLanguage() {
+      document.documentElement.lang = currentLang === "da" ? "da" : "en";
+      document.title = currentLang === "da"
+        ? "AI Legepladsen | Billedklassifikator"
+        : "The AI Playground | Image Classifier";
+    }
+
+    window.applyImageClassifierTranslations = function applyImageClassifierTranslations() {
+      updateDocumentLanguage();
+      classifierTabBar.setAttribute("aria-label", t("imageClassifierAriaSteps"));
+      resetBtn.setAttribute("aria-label", t("imageClassifierReset"));
+      undoBtn.setAttribute("aria-label", t("imageClassifierUndo"));
+      redoBtn.setAttribute("aria-label", t("imageClassifierRedo"));
+      renderClassOptions();
+      renderDoodleTiles();
+      updateSelectionUI();
+      trainingStatusEl.textContent = t(trainingStatusKey);
+      canvasHelperEl.textContent = t(canvasHelperKey);
+      if (predictionLabelEl.textContent === t("imageClassifierNothingDetected") || predictionLabelEl.textContent === "Nothing detected") {
+        predictionLabelEl.textContent = t("imageClassifierNothingDetected");
+      }
+      if (predictionLabelEl.textContent === "-") {
+        predictionConfidenceEl.textContent = t(predictionPlaceholderKey);
+      }
+      if (!hasDrawn) {
+        resetCanvas();
+      }
+    };
 
     renderClassOptions();
     renderDoodleTiles();
     loadDatasetDoodles();
     updateSelectionUI();
-    updateModelStatus("Waiting for training", "Not connected", "-");
+    updateModelStatus(t("imageClassifierWaitingForTraining"), t("imageClassifierNotConnected"), "-");
     resetCanvas();
     setPredictionPlaceholder();
     setCanvasAvailability(false);
@@ -269,7 +324,7 @@
         return `
           <button class="class-option${active}" type="button" data-class-id="${section.id}" aria-pressed="${selectedClasses.has(section.id) ? "true" : "false"}">
             <span class="class-option-check" aria-hidden="true"></span>
-            ${section.label}
+            ${getSectionLabel(section)}
           </button>
         `;
       }).join("");
@@ -283,13 +338,13 @@
       const visibleSections = doodleSections.filter((section) => selectedClasses.has(section.id));
 
       if (!visibleSections.length) {
-        doodleBrowser.innerHTML = `<div class="empty-browser">Choose classes above.</div>`;
+        doodleBrowser.innerHTML = `<div class="empty-browser">${t("imageClassifierChooseClassesAbove")}</div>`;
         return;
       }
 
       doodleBrowser.innerHTML = visibleSections.map((section) => `
         <section class="doodle-section" aria-labelledby="section-${section.id}">
-          <h3 id="section-${section.id}" class="doodle-section-title">${section.label.toLowerCase()}</h3>
+          <h3 id="section-${section.id}" class="doodle-section-title">${getSectionLabel(section).toLowerCase()}</h3>
           <div class="doodle-grid">
             ${section.samples.map((sample) => {
               const selected = selectedDoodles.has(sample.id) ? " selected" : "";
@@ -313,7 +368,7 @@
       if (selectedClasses.has(classId)) {
         selectedClasses.delete(classId);
         [...selectedDoodles].forEach((sampleId) => {
-          const sample = doodleSamples.find((item) => item.id === sampleId);
+          const sample = findSampleById(sampleId);
           if (sample && sample.labelId === classId) {
             selectedDoodles.delete(sampleId);
           }
@@ -390,12 +445,15 @@
       const labelGroups = getSelectedLabelGroups();
       const hasSamplesForEachClass = classCount > 0 && labelGroups.length === classCount;
 
-      selectionCountEl.textContent = `${classCount} classes selected, ${doodleCount} doodles selected`;
+      selectionCountEl.textContent = formatMessage("imageClassifierSelectedSummary", {
+        classes: classCount,
+        doodles: doodleCount
+      });
       selectionHintEl.textContent = classCount < 2
-        ? "Pick at least 2 classes"
+        ? t("imageClassifierPickAtLeastTwo")
         : hasSamplesForEachClass
-          ? "Ready to train"
-          : "Pick doodles for each class";
+          ? t("imageClassifierReadyToTrain")
+          : t("imageClassifierPickDoodlesForEach");
       trainModelBtn.disabled = classCount < 2 || !hasSamplesForEachClass || trainingInProgress;
       clearSelectionBtn.disabled = (classCount === 0 && doodleCount === 0) || trainingInProgress;
 
@@ -413,85 +471,127 @@
       trainingInProgress = true;
       modelReady = false;
       const selectedSamples = getSelectedSamples();
+      const payloadSamples = getTrainingPayloadSamples();
       const labelGroups = getSelectedLabelGroups();
 
       updateSelectionUI();
       setCanvasAvailability(false);
-      setPredictionPlaceholder("Training in progress...");
-      modelStateEl.textContent = "Training";
-      modelBackendEl.textContent = "Connecting...";
+      setPredictionPlaceholder("imageClassifierTrainingInProgress");
+      modelStateEl.textContent = t("imageClassifierTraining");
+      modelBackendEl.textContent = t("imageClassifierConnecting");
       trainingClassesEl.textContent = String(labelGroups.length);
       trainingSamplesEl.textContent = String(selectedSamples.length);
       trainingBackendNoteEl.textContent = "";
 
       showTrainingPopup();
-      setTrainingProgress(0, "Preparing training data...");
+      setTrainingProgress(0, "imageClassifierPreparingData");
       startTrainingAnimation();
 
       const payload = {
         labels: getSelectedClassIds(),
-        samples: labelGroups.map((group) => ({
-          label: group.labelId,
-          sampleCount: group.count
-        }))
+        samples: payloadSamples
       };
 
       try {
-        const response = await fetch(TRAIN_ENDPOINT, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(payload)
-        });
+        if (payloadSamples.length !== selectedSamples.length) {
+          throw new Error("Not all selected doodles have preview images available for training.");
+        }
+        
+        await wait(180);
+        setTrainingProgress(18, "imageClassifierEncodingDoodles");
 
-        if (!response.ok) {
-          throw new Error("Training request failed with status " + response.status);
+        const processedSamples = [];
+        for (let index = 0; index < payload.samples.length; index++) {
+          const sample = payload.samples[index];
+          const vector = await vectorizeImageDataUrl(sample.image);
+          processedSamples.push({
+            id: sample.id,
+            label: sample.label,
+            vector
+          });
+
+          const progress = 18 + ((index + 1) / payload.samples.length) * 44;
+          setTrainingProgress(progress, "imageClassifierEncodingDoodles");
         }
 
-        const result = await response.json().catch(() => ({}));
+        await wait(120);
+        setTrainingProgress(72, "imageClassifierTrainingClassifier");
+        trainedBrowserModel = buildBrowserModel(processedSamples, payload.labels);
+
+        await wait(120);
+        setTrainingProgress(90, "imageClassifierValidatingModel");
+        await wait(120);
+
         finishTraining({
-          backend: "Local backend connected",
-          classes: result.classes || labelGroups.length,
-          samples: result.samples || selectedSamples.length,
-          note: result.message || "Training finished successfully."
+          backend: t("imageClassifierBackendConnected"),
+          classes: labelGroups.length,
+          samples: selectedSamples.length,
+          note: t("imageClassifierTrainingFinished")
         });
       } catch (error) {
-        window.setTimeout(() => {
-          finishTraining({
-            backend: "Demo fallback",
-            classes: labelGroups.length,
-            samples: selectedSamples.length,
-            note: "The backend endpoint was not available, so the page switched to a local demo prediction flow."
-          });
-        }, 1300);
+        handleTrainingFailure(error, {
+          classes: labelGroups.length,
+          samples: selectedSamples.length
+        });
       }
     }
 
     function finishTraining(details) {
       stopTrainingAnimation();
-      setTrainingProgress(100, "Model ready. You can now test your drawing.");
+      setTrainingProgress(100, "imageClassifierModelReady");
       trainingClassesEl.textContent = String(details.classes);
       trainingSamplesEl.textContent = String(details.samples);
       trainingBackendNoteEl.textContent = details.note;
 
       trainingInProgress = false;
       modelReady = true;
-      const trainedAt = new Date().toLocaleTimeString([], {
+      const trainedAt = new Date().toLocaleTimeString(currentLang === "da" ? "da-DK" : "en-US", {
         hour: "2-digit",
         minute: "2-digit"
       });
-      updateModelStatus("Ready", details.backend, trainedAt);
-      canvasHelperEl.textContent = "Draw one of the classes you selected, then press Test model.";
+      updateModelStatus(t("imageClassifierReady"), details.backend, trainedAt);
+      canvasHelperKey = "imageClassifierDrawSelectedClass";
+      canvasHelperEl.textContent = t(canvasHelperKey);
       testingTabBtn.disabled = false;
       setCanvasAvailability(true);
       handleResetCanvas();
-      setPredictionPlaceholder("Draw in the canvas, then click Test model.");
+      setPredictionPlaceholder("imageClassifierDrawThenTest");
       updateSelectionUI();
       window.setTimeout(() => {
         hideTrainingPopup();
         setActiveTab("testing");
       }, 550);
+    }
+
+    function handleTrainingFailure(error, details) {
+      stopTrainingAnimation();
+      trainingInProgress = false;
+      modelReady = false;
+      testingTabBtn.disabled = true;
+      setCanvasAvailability(false);
+      setPredictionPlaceholder("imageClassifierTrainAndDraw");
+      trainingProgressEl.style.width = "0%";
+      trainingPercentEl.textContent = "0%";
+      trainingStatusKey = "imageClassifierTrainingFailed";
+      trainingStatusEl.textContent = t(trainingStatusKey);
+      updateModelStatus(
+        t("imageClassifierWaitingForTraining"),
+        t("imageClassifierNotConnected"),
+        "-"
+      );
+      trainedBrowserModel = null;
+      trainingClassesEl.textContent = String(details.classes);
+      trainingSamplesEl.textContent = String(details.samples);
+      trainingBackendNoteEl.textContent = getTrainingErrorMessage(error);
+      updateSelectionUI();
+    }
+
+    function getTrainingErrorMessage(error) {
+      if (error && typeof error.message === "string" && error.message.trim()) {
+        return error.message;
+      }
+
+      return "Training failed. Make sure the selected doodles are loaded before training.";
     }
 
     function showTrainingPopup() {
@@ -508,10 +608,10 @@
       stopTrainingAnimation();
       let value = 0;
       const steps = [
-        "Preparing training data...",
-        "Encoding placeholder doodles...",
-        "Training the classifier...",
-        "Validating the model..."
+        "imageClassifierPreparingData",
+        "imageClassifierEncodingDoodles",
+        "imageClassifierTrainingClassifier",
+        "imageClassifierValidatingModel"
       ];
 
       trainingInterval = window.setInterval(() => {
@@ -532,7 +632,8 @@
       const clamped = Math.max(0, Math.min(100, value));
       trainingProgressEl.style.width = clamped + "%";
       trainingPercentEl.textContent = Math.round(clamped) + "%";
-      trainingStatusEl.textContent = label;
+      trainingStatusKey = label;
+      trainingStatusEl.textContent = t(label);
     }
 
     function setActiveTab(tab) {
@@ -559,6 +660,8 @@
       document.querySelectorAll("#reset-btn, #undo-btn, #redo-btn, #classify-btn").forEach((button) => {
         button.disabled = !enabled;
       });
+      undoBtn.disabled = !enabled || history.length <= 1;
+      redoBtn.disabled = !enabled || redoHistory.length === 0;
     }
 
     function handleResetCanvas() {
@@ -574,13 +677,15 @@
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.font = "2rem Caroni, sans-serif";
-      ctx.fillText(modelReady ? "Draw here" : "Train model first", canvas.width / 2, canvas.height / 2);
+      ctx.fillText(modelReady ? t("imageClassifierDrawHere") : t("imageClassifierTrainFirst"), canvas.width / 2, canvas.height / 2);
 
       const initialState = ctx.getImageData(0, 0, canvas.width, canvas.height);
       placeholderImage = initialState;
       history = [initialState];
       redoHistory = [];
       ctx.beginPath();
+      undoBtn.disabled = !modelReady || history.length <= 1;
+      redoBtn.disabled = !modelReady || redoHistory.length === 0;
     }
 
     function startDrawing(event) {
@@ -627,6 +732,8 @@
 
       drawing = false;
       ctx.beginPath();
+      undoBtn.disabled = !modelReady || history.length <= 1;
+      redoBtn.disabled = !modelReady || redoHistory.length === 0;
     }
 
     function handleUndo() {
@@ -638,6 +745,8 @@
       const previousState = history[history.length - 1];
       ctx.putImageData(previousState, 0, 0);
       hasDrawn = !isSameImageData(previousState, placeholderImage);
+      undoBtn.disabled = !modelReady || history.length <= 1;
+      redoBtn.disabled = !modelReady || redoHistory.length === 0;
     }
 
     function handleRedo() {
@@ -647,66 +756,48 @@
       history.push(redoneState);
       ctx.putImageData(redoneState, 0, 0);
       hasDrawn = !isSameImageData(redoneState, placeholderImage);
+      undoBtn.disabled = !modelReady || history.length <= 1;
+      redoBtn.disabled = !modelReady || redoHistory.length === 0;
     }
 
     async function classifyDrawing() {
-      if (!modelReady) return;
+      if (!modelReady || !trainedBrowserModel) return;
 
       if (!hasDrawn) {
-        setPredictionPlaceholder("Draw something first so the model has an image to test.");
+        setPredictionPlaceholder("imageClassifierDrawSomethingFirst");
         return;
       }
 
-      predictionLabelEl.textContent = "Testing...";
-      predictionConfidenceEl.textContent = "Sending the canvas to the model.";
-
-      const imageDataUrl = canvas.toDataURL("image/png");
-      const payload = {
-        labels: getSelectedClassIds(),
-        image: imageDataUrl
-      };
+      predictionLabelEl.textContent = t("imageClassifierTestingProgress");
+      predictionConfidenceEl.textContent = t("imageClassifierSendingCanvas");
 
       try {
-        const response = await fetch(PREDICT_ENDPOINT, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(payload)
-        });
-
-        if (!response.ok) {
-          throw new Error("Prediction request failed with status " + response.status);
-        }
-
-        const result = await response.json();
+        await wait(120);
+        const result = predictWithBrowserModel(vectorizeCanvasElement(canvas));
         showPrediction({
           label: formatLabel(result.label || "unknown"),
           confidence: typeof result.confidence === "number" ? result.confidence : null,
-          source: "Prediction from local backend."
+          source: t("imageClassifierPredictionFromBackend")
         });
       } catch (error) {
-        const result = mockPredictFromCanvas();
-        showPrediction({
-          label: result.label,
-          confidence: result.confidence,
-          source: "Prediction shown with the built-in demo fallback because the backend endpoint was unavailable."
-        });
+        predictionLabelEl.textContent = "-";
+        predictionConfidenceEl.textContent = error.message || t("imageClassifierPredictionFallback");
       }
     }
 
     function showPrediction(result) {
       predictionLabelEl.textContent = result.label;
       if (typeof result.confidence === "number") {
-        predictionConfidenceEl.textContent = Math.round(result.confidence * 100) + "% confidence. " + result.source;
+        predictionConfidenceEl.textContent = Math.round(result.confidence * 100) + "% " + t("imageClassifierConfidence") + ". " + result.source;
       } else {
         predictionConfidenceEl.textContent = result.source;
       }
     }
 
-    function setPredictionPlaceholder(message) {
+    function setPredictionPlaceholder(messageKey = "imageClassifierTrainAndDraw") {
+      predictionPlaceholderKey = messageKey;
       predictionLabelEl.textContent = "-";
-      predictionConfidenceEl.textContent = message || "Train the model and draw a doodle to test it.";
+      predictionConfidenceEl.textContent = t(messageKey);
     }
 
     function getCanvasPoint(event) {
@@ -722,14 +813,206 @@
 
     function formatLabel(value) {
       const section = doodleSections.find((item) => item.id === value);
-      if (section) return section.label;
+      if (section) return getSectionLabel(section);
       return value.charAt(0).toUpperCase() + value.slice(1);
     }
 
     function getSelectedSamples() {
       return [...selectedDoodles]
-        .map((id) => doodleSamples.find((sample) => sample.id === id))
+        .map((id) => findSampleById(id))
         .filter(Boolean);
+    }
+
+    function findSampleById(id) {
+      for (const section of doodleSections) {
+        const sample = section.samples.find((item) => item.id === id);
+        if (sample) {
+          return {
+            ...sample,
+            labelId: section.id,
+            label: getSectionLabel(section)
+          };
+        }
+      }
+
+      return doodleSamples.find((sample) => sample.id === id) || null;
+    }
+
+    function getTrainingPayloadSamples() {
+      return getSelectedSamples()
+        .filter((sample) => sample.previewImage)
+        .map((sample) => ({
+          id: sample.id,
+          label: sample.labelId,
+          image: sample.previewImage
+        }));
+    }
+
+    async function vectorizeImageDataUrl(dataUrl) {
+      const image = await loadImage(dataUrl);
+      const offscreenCanvas = document.createElement("canvas");
+      offscreenCanvas.width = canvas.width;
+      offscreenCanvas.height = canvas.height;
+      const offscreenCtx = offscreenCanvas.getContext("2d");
+      offscreenCtx.fillStyle = "white";
+      offscreenCtx.fillRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
+      offscreenCtx.drawImage(image, 0, 0, offscreenCanvas.width, offscreenCanvas.height);
+      const normalizedCanvas = normalizeCanvasForClassifier(offscreenCtx, offscreenCanvas.width, offscreenCanvas.height, 64);
+      return extractVectorFromContext(normalizedCanvas.getContext("2d"), 64, 64);
+    }
+
+    function vectorizeCanvasElement(sourceCanvas) {
+      const sourceCtx = sourceCanvas.getContext("2d");
+      const normalizedCanvas = normalizeCanvasForClassifier(sourceCtx, sourceCanvas.width, sourceCanvas.height, 64);
+      return extractVectorFromContext(normalizedCanvas.getContext("2d"), 64, 64);
+    }
+
+    function normalizeCanvasForClassifier(sourceCtx, width, height, targetSize = 64) {
+      const image = sourceCtx.getImageData(0, 0, width, height);
+      const data = image.data;
+
+      let minX = width;
+      let minY = height;
+      let maxX = -1;
+      let maxY = -1;
+      let foundInk = false;
+
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          const i = (y * width + x) * 4;
+          const average = (data[i] + data[i + 1] + data[i + 2]) / 3;
+          const isInk = average < 200;
+
+          if (isInk) {
+            foundInk = true;
+            if (x < minX) minX = x;
+            if (x > maxX) maxX = x;
+            if (y < minY) minY = y;
+            if (y > maxY) maxY = y;
+          }
+        }
+      }
+
+      const normalizedCanvas = document.createElement("canvas");
+      normalizedCanvas.width = targetSize;
+      normalizedCanvas.height = targetSize;
+      const normalizedCtx = normalizedCanvas.getContext("2d");
+
+      normalizedCtx.fillStyle = "white";
+      normalizedCtx.fillRect(0, 0, targetSize, targetSize);
+
+      if (!foundInk) {
+        return normalizedCanvas;
+      }
+
+      const boxWidth = maxX - minX + 1;
+      const boxHeight = maxY - minY + 1;
+      const padding = 4;
+      const availableSize = targetSize - 2 * padding;
+      const scale = Math.min(availableSize / boxWidth, availableSize / boxHeight);
+      const newWidth = Math.max(1, Math.round(boxWidth * scale));
+      const newHeight = Math.max(1, Math.round(boxHeight * scale));
+      const offsetX = Math.floor((targetSize - newWidth) / 2);
+      const offsetY = Math.floor((targetSize - newHeight) / 2);
+
+      normalizedCtx.drawImage(
+        sourceCtx.canvas,
+        minX, minY, boxWidth, boxHeight,
+        offsetX, offsetY, newWidth, newHeight
+      );
+
+      return normalizedCanvas;
+    }
+
+    function extractVectorFromContext(sourceCtx, width, height) {
+      const image = sourceCtx.getImageData(0, 0, width, height);
+      const vector = new Float32Array(width * height);
+
+      for (let i = 0; i < width * height; i++) {
+        const pixelOffset = i * 4;
+        const average = (
+          image.data[pixelOffset] +
+          image.data[pixelOffset + 1] +
+          image.data[pixelOffset + 2]
+        ) / 3;
+        vector[i] = 1 - (average / 255);
+      }
+
+      return normalizeVector(vector);
+    }
+
+    function normalizeVector(vector) {
+      let magnitude = 0;
+      for (let i = 0; i < vector.length; i++) {
+        magnitude += vector[i] * vector[i];
+      }
+
+      magnitude = Math.sqrt(magnitude) || 1;
+      return Array.from(vector, (value) => value / magnitude);
+    }
+
+    function buildBrowserModel(samples, labels) {
+      return {
+        labels: [...labels],
+        samples: samples.map((sample) => ({
+          id: sample.id,
+          label: sample.label,
+          vector: sample.vector
+        }))
+      };
+    }
+
+    function predictWithBrowserModel(vector) {
+      if (!trainedBrowserModel || !trainedBrowserModel.samples.length) {
+        throw new Error("No in-browser model is available yet.");
+      }
+
+      const scoredSamples = trainedBrowserModel.samples
+        .map((sample) => ({
+          label: sample.label,
+          score: cosineSimilarity(sample.vector, vector)
+        }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, Math.min(5, trainedBrowserModel.samples.length));
+
+      const scoreByLabel = new Map();
+      let totalScore = 0;
+
+      scoredSamples.forEach((match) => {
+        const safeScore = Math.max(0, match.score);
+        totalScore += safeScore;
+        scoreByLabel.set(match.label, (scoreByLabel.get(match.label) || 0) + safeScore);
+      });
+
+      const sortedLabels = [...scoreByLabel.entries()].sort((a, b) => b[1] - a[1]);
+      const [bestLabel, bestScore] = sortedLabels[0] || [trainedBrowserModel.labels[0], 0];
+      const confidence = totalScore > 0 ? bestScore / totalScore : 0.5;
+
+      return {
+        label: bestLabel,
+        confidence: Math.max(0.35, Math.min(0.99, confidence))
+      };
+    }
+
+    function cosineSimilarity(left, right) {
+      let sum = 0;
+      for (let index = 0; index < left.length; index++) {
+        sum += left[index] * right[index];
+      }
+      return sum;
+    }
+
+    function loadImage(src) {
+      return new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => resolve(image);
+        image.onerror = () => reject(new Error("Could not read one of the doodle images for training."));
+        image.src = src;
+      });
+    }
+
+    function wait(ms) {
+      return new Promise((resolve) => window.setTimeout(resolve, ms));
     }
 
     function getSelectedLabelGroups() {
@@ -764,7 +1047,7 @@
     function getSelectedClassLabels() {
       return doodleSections
         .filter((section) => selectedClasses.has(section.id))
-        .map((section) => section.label);
+        .map((section) => getSectionLabel(section));
     }
 
     function parseQuickDrawBinary(buffer, limit) {
@@ -899,7 +1182,7 @@
 
       if (features.empty) {
         return {
-          label: "Nothing detected",
+          label: t("imageClassifierNothingDetected"),
           confidence: 0.12
         };
       }
@@ -967,4 +1250,3 @@
   </script>
 </body>
 </html>
-

@@ -6,6 +6,70 @@
   <title>The AI Playground | Other</title>
   <link rel="icon" href="./images/butterfly colored.png">
   <link rel="stylesheet" href="./styles/main.css">
+  <style>
+    .resources-focus {
+      width: min(860px, 100%);
+      gap: 18px;
+    }
+
+    .resources-intro {
+      margin: 0;
+      font-family: Caroni, sans-serif;
+      font-size: 1.6rem;
+      line-height: 1.4;
+      text-align: left;
+    }
+
+    .resource-card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 100%;
+    }
+
+    .resource-card {
+      background: white;
+      border: 2px solid #131313;
+      border-radius: 18px;
+      padding: 18px 22px;
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+    .resource-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+
+    .resource-card a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 18px;
+      border: 2px solid #131313;
+      border-radius: 14px;
+      background: #9a60a6;
+      color: white;
+      text-decoration: none;
+      font-family: Caroni, sans-serif;
+      font-size: 1.4rem;
+      line-height: 1;
+    }
+
+    .resource-card h2 {
+      margin: 0;
+    }
+
+    .resource-card p {
+      margin: 0;
+      font-family: Caroni, sans-serif;
+      font-size: 1.6rem;
+      line-height: 1.4;
+    }
+  </style>
 </head>
 <body>
   <div class="page">
@@ -26,9 +90,38 @@
             </button>
         </div>
     </div>
-    <div class="focus" style="width:fit-content">
-      <p>You just had to, didn't you?</p>
-      <p>Links to other resources to be added here.</p>
+    <div class="focus resources-focus">
+      <p class="resources-intro">This tool was primarily inspired by:</p>
+      <div class="resource-card-list">
+        <section class="resource-card">
+          <div class="resource-card-header">
+            <h2>Quick, Draw!</h2>
+            <a href="https://quickdraw.withgoogle.com/" target="_blank" rel="noopener noreferrer">Link</a>
+          </div>
+          <p>A playful Google game where you draw a picture and an AI tries to guess what it is before time runs out. It shows how computers can learn to recognize simple doodles.</p>
+        </section>
+        <section class="resource-card">
+          <div class="resource-card-header">
+            <h2>DoodleIt</h2>
+            <a href="https://www.cs.uml.edu/~fredm/DoodleItUpdated/LatestFiles:%20v2/" target="_blank" rel="noopener noreferrer">Link</a>
+          </div>
+          <p>A drawing game that invites children to sketch objects and see how a computer responds. It makes AI feel more hands-on by turning learning into a simple doodling activity.</p>
+        </section>
+        <section class="resource-card">
+          <div class="resource-card-header">
+            <h2>Teachable Machine</h2>
+            <a href="https://teachablemachine.withgoogle.com/" target="_blank" rel="noopener noreferrer">Link</a>
+          </div>
+          <p>A beginner-friendly tool from Google that lets people train their own image, sound, or pose models with examples. It is useful for showing that machine learning can be taught by giving a computer examples.</p>
+        </section>
+        <section class="resource-card">
+          <div class="resource-card-header">
+            <h2>Machine Learning for Kids</h2>
+            <a href="https://machinelearningforkids.co.uk/" target="_blank" rel="noopener noreferrer">Link</a>
+          </div>
+          <p>A platform designed to help children explore machine learning through easy projects and creative experiments. It connects AI ideas with playful making, coding, and testing.</p>
+        </section>
+      </div>
     </div>
     
   </div>

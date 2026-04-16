@@ -92,6 +92,16 @@ button.crit {
     transform: scale(1.05);
 }
 
+#undo-btn:disabled,
+#undo-btn:disabled:hover,
+#redo-btn:disabled,
+#redo-btn:disabled:hover {
+    background: #a6a6a6;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
 #close-rules-btn {
     position: absolute;
     top: 10px;

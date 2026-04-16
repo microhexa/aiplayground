@@ -1,9 +1,11 @@
 const canvas = document.getElementById("draw");
 const ctx = canvas.getContext("2d");
-const resultElTop = document.getElementById("result-top");
-const resultElBot = document.getElementById("result-bottom");
 const detectedTextEl = document.getElementById("result-detected");
 const whyTextEl = document.getElementById("result-why");
+const whyToggleBtn = document.getElementById("why-toggle-btn");
+const whyPanelEl = document.getElementById("why-panel");
+const undoBtn = document.getElementById("undo-btn");
+const redoBtn = document.getElementById("redo-btn");
 
 // Set canvas sizes
 canvas.width = canvas.offsetWidth;
@@ -14,10 +16,21 @@ let history = [];
 let redoHistory = [];
 
 let placeholderImage = null;
+let whyPanelOpen = false;
+const WHY_POPUP_OFFSET = 12;
+
+function updateUndoButtonState() {
+  undoBtn.disabled = history.length <= 1;
+}
+
+function updateRedoButtonState() {
+  redoBtn.disabled = redoHistory.length === 0;
+}
 
 // White background
 resetCanvas();
 setResultPlaceholder();
+updateWhyPanel(false);
 
 // Simple drawing
 let drawing = false;
@@ -53,6 +66,8 @@ canvas.addEventListener("mouseup", () => {
   }
   drawing = false;
   ctx.beginPath();
+  updateUndoButtonState();
+  updateRedoButtonState();
 });
 
 canvas.addEventListener("mouseleave", () => {
@@ -65,6 +80,8 @@ canvas.addEventListener("mouseleave", () => {
   }
   drawing = false;
   ctx.beginPath();
+  updateUndoButtonState();
+  updateRedoButtonState();
 });
 
 canvas.addEventListener("mousemove", draw);
@@ -85,6 +102,8 @@ document.getElementById("undo-btn").addEventListener("click", () => {
 
     hasDrawn = !isSameImageData(previousState, placeholderImage);
   }
+  updateUndoButtonState();
+  updateRedoButtonState();
 });
 
 document.getElementById("redo-btn").addEventListener("click", () => {
@@ -97,6 +116,8 @@ document.getElementById("redo-btn").addEventListener("click", () => {
     ctx.putImageData(redoneState, 0, 0);
     hasDrawn = !isSameImageData(redoneState, placeholderImage);
   }
+  updateUndoButtonState();
+  updateRedoButtonState();
 });
 
 document.getElementById("classify-btn").addEventListener("click", () => {
@@ -135,7 +156,48 @@ document.getElementById("classify-btn").addEventListener("click", () => {
     </ul>
   `;
 
+  whyToggleBtn.disabled = false;
+  updateWhyPanel(false);
   applyTranslations();
+});
+
+whyToggleBtn.addEventListener("click", () => {
+  if (whyToggleBtn.disabled) return;
+  const rect = whyToggleBtn.getBoundingClientRect();
+  updateWhyPanel(!whyPanelOpen, {
+    x: rect.right,
+    y: rect.top
+  });
+});
+
+whyToggleBtn.addEventListener("mouseenter", (event) => {
+  if (whyToggleBtn.disabled) return;
+  updateWhyPanel(true, {
+    x: event.clientX,
+    y: event.clientY
+  });
+});
+
+whyToggleBtn.addEventListener("mousemove", (event) => {
+  if (!whyPanelOpen || whyToggleBtn.disabled) return;
+  positionWhyPanel(event.clientX, event.clientY);
+});
+
+whyToggleBtn.addEventListener("mouseleave", () => {
+  updateWhyPanel(false);
+});
+
+whyToggleBtn.addEventListener("focus", () => {
+  if (whyToggleBtn.disabled) return;
+  const rect = whyToggleBtn.getBoundingClientRect();
+  updateWhyPanel(true, {
+    x: rect.right,
+    y: rect.top
+  });
+});
+
+whyToggleBtn.addEventListener("blur", () => {
+  updateWhyPanel(false);
 });
 
 function resetCanvas() {
@@ -154,13 +216,41 @@ function resetCanvas() {
   placeholderImage = initialState;
   history = [initialState];
   redoHistory = [];
+  updateUndoButtonState();
+  updateRedoButtonState();
 }
 
 function setResultPlaceholder() {
   detectedTextEl.removeAttribute("data-i18n");
-  detectedTextEl.textContent = "-";
+  detectedTextEl.textContent = t("ruleDetectedPlaceholder");
   whyTextEl.removeAttribute("data-i18n");
-  whyTextEl.textContent = "-";
+  whyTextEl.textContent = t("ruleWhyPlaceholder");
+  whyToggleBtn.disabled = true;
+  updateWhyPanel(false);
+}
+
+function updateWhyPanel(nextOpen, position = null) {
+  whyPanelOpen = nextOpen && !whyToggleBtn.disabled;
+  whyPanelEl.classList.toggle("hidden", !whyPanelOpen);
+  whyPanelEl.setAttribute("aria-hidden", String(!whyPanelOpen));
+  whyToggleBtn.setAttribute("aria-expanded", String(whyPanelOpen));
+  whyToggleBtn.setAttribute("aria-label", t(whyPanelOpen ? "ruleHideWhyAria" : "ruleWhyToggleAria"));
+
+  if (whyPanelOpen && position) {
+    positionWhyPanel(position.x, position.y);
+  }
+}
+
+function positionWhyPanel(clientX, clientY) {
+  const panelWidth = whyPanelEl.offsetWidth;
+  const panelHeight = whyPanelEl.offsetHeight;
+  const maxLeft = window.innerWidth - panelWidth - 16;
+  const maxTop = window.innerHeight - panelHeight - 16;
+  const nextLeft = Math.min(clientX + WHY_POPUP_OFFSET, Math.max(16, maxLeft));
+  const nextTop = Math.min(clientY + WHY_POPUP_OFFSET, Math.max(16, maxTop));
+
+  whyPanelEl.style.left = `${Math.max(16, nextLeft)}px`;
+  whyPanelEl.style.top = `${Math.max(16, nextTop)}px`;
 }
 
 function isSameImageData(img1, img2) {
