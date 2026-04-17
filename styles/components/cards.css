@@ -1,7 +1,7 @@
 .card {
     position: relative;
     flex: 1;
-    min-height: 240px;
+    min-height: 350px;
     border: #131313 solid 2px;
     padding: 28px;
     display: flex;
@@ -29,23 +29,23 @@
   align-items: center;
   justify-content: center;
   font-family: Caroni, sans-serif;
-  font-size: 1.45rem;
+  font-size: 1.6rem;
   line-height: 1;
-  border: 2px solid #131313;
-  background: white;
+  border: 2px dashed #131313;
+  background: rgba(255, 255, 255, 0.555);
   color: #131313;
   z-index: 4;
 }
 
 .card-step:not(.card-step-locked) .card-step-badge {
-  background: #975aa3;
-  color: white;
+  background: #975aa398;
+  color: #ffffff;
   border-color: #131313;
   box-shadow: 0 8px 20px rgba(151, 90, 163, 0.24);
 }
 
 .card-step-locked .card-step-badge {
-  background: #f1f1f1;
+  background: rgba(255, 255, 255, 0.555);
   color: #6c6c6c;
   border-color: #9a9a9a;
 }

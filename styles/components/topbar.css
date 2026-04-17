@@ -1,27 +1,58 @@
 .topbar {
-    width: 100%;
-    padding: 10px 24px;
+    width: 320px;
+    padding: 24px 18px;
     background: white;
-    border-bottom: #131313 solid 2px;
+    border-right: #131313 solid 2px;
+    border-radius: 0;
+    min-height: 100vh;
     text-align: left;
-    margin-bottom: 28px;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     justify-content: flex-start;
     position: relative;
-    gap: 34px;
-    flex-wrap: wrap;
+    gap: 18px;
+    box-sizing: border-box;
+}
+
+.brand-block {
+    width: 100%;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(19, 19, 19, 0.16);
+}
+
+.brand-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.sidebar-kicker {
+    margin: 12px 0 2px;
+    padding-left: 36px;
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #7f4b8b;
+    white-space: nowrap;
+    line-height: 1.35;
 }
 
 .logo {
-    width: 30px;
-    height: 30px;
-    min-width: 30px;
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
     display: block;
     object-fit: contain;
     vertical-align: middle;
     margin-right: 0;
-    order: 1;
+}
+
+.sidebar h1 {
+    display: block;
+    min-height: 0;
+    flex: 1 1 auto;
 }
 
 .divider {
@@ -37,8 +68,8 @@
     opacity: 0.7;
 }
 
-.divider.vertical {
-    order: 3;
+.sidebar .divider.vertical {
+    display: none;
 }
 
 .vl {
@@ -50,12 +81,11 @@
 }
 
 .menuoption {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     cursor: pointer;
-    order: 3;
     opacity: 0.72;
     position: relative;
-    padding: 4px 6px 12px;
+    padding: 2px 4px 10px;
     transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
@@ -63,8 +93,8 @@
     content: "|";
     position: absolute;
     left: 50%;
-    top: 30%;
-    transform: translate(-50%, 4px) rotate(92deg) scaleY(2);
+    bottom: -6px;
+    transform: translateX(-50%) rotate(92deg) scaleY(2);
     color: #131313;
     opacity: 0;
     transition: opacity 0.15s ease;
@@ -88,9 +118,12 @@
 .lang-toggle {
     display: flex;
     gap: 6px;
-    margin-left: auto;
-    order: 3;
     align-items: center;
+}
+
+.sidebar-lang-toggle {
+    margin-top: auto;
+    padding-top: 18px;
 }
 
 .lang-toggle button {
@@ -128,15 +161,25 @@
 
 @media (max-width: 900px) {
     .topbar {
+        width: 100%;
+        min-width: 0;
+        min-height: 0;
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap;
         gap: 20px;
     }
 
-    .divider.vertical {
-        display: none;
+    .brand-row {
+        width: 100%;
     }
 
-    .lang-toggle {
-        width: 100%;
-        justify-content: flex-end;
+    .menuoption {
+        margin-right: 12px;
+    }
+
+    .sidebar-lang-toggle {
+        margin-top: 0;
+        padding-top: 0;
     }
 }

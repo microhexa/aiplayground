@@ -297,6 +297,14 @@ const translations = {
     }
 };
 
+translations.en.rulesText = "It follows simple rules.";
+translations.en.classifierText = "It spots patterns in pictures.";
+translations.en.chatbotText = "It talks like it understands.";
+
+translations.da.rulesText = "Den fÃ¸lger simple regler.";
+translations.da.classifierText = "Den finder mÃ¸nstre i billeder.";
+translations.da.chatbotText = "Den taler, som om den forstÃ¥r.";
+
 let currentLang = localStorage.getItem("lang") || "en";
 
 function setLanguage(lang) {

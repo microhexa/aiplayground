@@ -47,6 +47,8 @@ button:hover {
 
 .start-btn {
     margin-top: auto;
+    padding: 8px 18px;
+    min-height: 0;
     line-height: 1.2;
 }
 

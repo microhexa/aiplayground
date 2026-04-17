@@ -9,14 +9,19 @@
 </head>
 <body>
   <div class="page">
-    <div class="topbar">
-        <img src="./images/butterfly colored.png" alt="AI Playground Logo" class="logo">
-        <h1 data-i18n="siteTitle">The AI Playground</h1>
-        <div class="divider vertical">|</div>
+    <div class="page-shell">
+    <div class="topbar sidebar">
+        <div class="brand-block">
+            <div class="brand-row">
+                <img src="./images/butterfly colored.png" alt="AI Playground Logo" class="logo">
+                <h1 data-i18n="siteTitle">The AI Playground</h1>
+            </div>
+        <p class="sidebar-kicker" data-i18n="introKicker">Learn AI by trying it</p>
+        </div>
         <div id="menu-home" data-i18n="menuOption1" class="menuoption active">Home</div>
         <div id="menu-about" data-i18n="menuOption2" class="menuoption">About</div>
         <div id="menu-curious" data-i18n="menuOption3" class="menuoption">For the curious</div>
-        <div class="lang-toggle">
+        <div class="lang-toggle sidebar-lang-toggle">
             <button id="lang-en" class="flag active">
                 <img src="./images/flags/uk_color.png" alt="English">
             </button>
@@ -28,7 +33,6 @@
     </div>
     <div class="focus">
       <div class="intro"> 
-          <p class="intro-kicker" data-i18n="introKicker">Learn AI by trying it</p>
           <h2 data-i18n="intro1">Try different kinds of AI</h2>
           <p class="intro-lead" data-i18n="intro2">Pick a card below to explore how each one works.</p>
       </div>
@@ -36,21 +40,22 @@
         <div class="card card-step card-step-active" id="slot-left">
           <div class="card-step-badge" aria-hidden="true">1</div>
           <h2 data-i18n="rulesTitle">Rule-based AI</h2>
-          <p data-i18n="rulesText">It never guesses - it only follows rules.</p>
+          <p data-i18n="rulesText">It follows simple rules.</p>
           <button id="start-rule-based"class="start-btn">Start</button>
         </div>
         <div class="card locked card-step card-step-next" id="slot-center">
           <div class="card-step-badge" aria-hidden="true">2</div>
           <h2 data-i18n="classifierTitle">Image classifier</h2>
-          <p data-i18n="classifierText">It's very good at spotting patterns in pictures.</p>
+          <p data-i18n="classifierText">It spots patterns in pictures.</p>
           <button id="start-image-classifier" class="start-btn" hidden>Start</button>
         </div>
         <div class="card locked card-step card-step-locked" id="slot-right">
           <div class="card-step-badge" aria-hidden="true">3</div>
           <h2 data-i18n="chatbotTitle">Vision Chat</h2>
-          <p data-i18n="chatbotText">It sounds smart and confident.</p>
+          <p data-i18n="chatbotText">It talks like it understands.</p>
         </div>
       </div>
+    </div>
     </div>
     
   </div>
