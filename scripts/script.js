@@ -29,9 +29,12 @@ const homeMenu = document.getElementById("menu-home");
 const curiousMenu = document.getElementById("menu-curious");
 const startRuleBasedBtn = document.getElementById("start-rule-based");
 const startImageClassifierBtn = document.getElementById("start-image-classifier");
+const startChatbotBtn = document.getElementById("start-chatbot");
 const returnBtn = document.getElementById("return-btn");
 const classifierCard = document.getElementById("slot-center");
+const chatbotCard = document.getElementById("slot-right");
 const IMAGE_CLASSIFIER_UNLOCK_KEY = "imageClassifierUnlocked";
+const CHATBOT_UNLOCK_KEY = "chatbotUnlocked";
 
 function updatePageMeta() {
     document.documentElement.lang = currentLang === "da" ? "da" : "en";
@@ -45,6 +48,8 @@ function updatePageMeta() {
         document.title = t("pageTitleCurious");
     } else if (currentPath.endsWith("rule-based-ai.html")) {
         document.title = t("pageTitleRuleBased");
+    } else if (currentPath.endsWith("chatbot.html")) {
+        document.title = t("pageTitleChatbot");
     } else {
         document.title = t("pageTitleHome");
     }
@@ -86,11 +91,19 @@ if (startImageClassifierBtn) {
     };
 }
 
+if (startChatbotBtn) {
+    startChatbotBtn.onclick = () => {
+        window.location.href = "chatbot.html";
+    };
+}
+
 if (returnBtn) {
     returnBtn.onclick = () => {
         const currentPath = window.location.pathname;
         if (currentPath.endsWith("rule-based-ai.html")) {
             localStorage.setItem(IMAGE_CLASSIFIER_UNLOCK_KEY, "true");
+        } else if (currentPath.endsWith("image-classifier.html")) {
+            localStorage.setItem(CHATBOT_UNLOCK_KEY, "true");
         }
         window.location.href = "index.html";
     }
@@ -99,8 +112,19 @@ if (returnBtn) {
 if (classifierCard) {
     const isUnlocked = localStorage.getItem(IMAGE_CLASSIFIER_UNLOCK_KEY) === "true";
     classifierCard.classList.toggle("locked", !isUnlocked);
+    classifierCard.classList.toggle("card-step-locked", !isUnlocked);
+    classifierCard.classList.toggle("card-step-next", isUnlocked);
     if (startImageClassifierBtn) {
         startImageClassifierBtn.hidden = !isUnlocked;
+    }
+}
+
+if (chatbotCard) {
+    const isUnlocked = localStorage.getItem(CHATBOT_UNLOCK_KEY) === "true";
+    chatbotCard.classList.toggle("locked", !isUnlocked);
+    chatbotCard.classList.toggle("card-step-locked", !isUnlocked);
+    if (startChatbotBtn) {
+        startChatbotBtn.hidden = !isUnlocked;
     }
 }
 

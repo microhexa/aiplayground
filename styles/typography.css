@@ -6,10 +6,9 @@ p {
 
 .topbar h1 {
     margin: 0;
-    margin-left: -45px;
     text-align: left;
     padding: 0;
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     font-weight: normal;
     letter-spacing: 0%;
     order: 2;
@@ -32,6 +31,28 @@ h2 {
     text-align: left;
     color: #333;
     line-height: 1.5;
+}
+
+.intro-kicker {
+    margin: 0 0 10px;
+    font-size: 1.1rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #7f4b8b;
+}
+
+.intro h2 {
+    font-size: 2.1rem;
+    line-height: 1.1;
+    max-width: 700px;
+    margin-bottom: 16px;
+}
+
+.intro-lead {
+    max-width: 760px;
+    font-size: 1.75rem;
+    line-height: 1.45;
+    color: #222;
 }
 
 button {

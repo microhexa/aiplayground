@@ -1,15 +1,16 @@
 .topbar {
     width: 100%;
-    padding: 20px 30px;
+    padding: 10px 24px;
     background: white;
     border-bottom: #131313 solid 2px;
     text-align: left;
-    margin-bottom: 20px;
+    margin-bottom: 28px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     position: relative;
-    gap: 50px;
+    gap: 34px;
+    flex-wrap: wrap;
 }
 
 .logo {
@@ -19,7 +20,7 @@
     display: block;
     object-fit: contain;
     vertical-align: middle;
-    margin-right: 10px;
+    margin-right: 0;
     order: 1;
 }
 
@@ -27,12 +28,13 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 50px;
+    font-size: 34px;
     line-height: 1;
     color: #131313;
     height: 100%;
-    transform: scaleX(0.5);
+    transform: scaleX(0.4);
     transform-origin: center;
+    opacity: 0.7;
 }
 
 .divider.vertical {
@@ -51,9 +53,10 @@
     font-size: 1.1rem;
     cursor: pointer;
     order: 3;
-    opacity: 0.6;
+    opacity: 0.72;
     position: relative;
-    padding-bottom: 12px;
+    padding: 4px 6px 12px;
+    transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
 .menuoption::after {
@@ -69,7 +72,8 @@
 
 .menuoption.active,
 .menuoption:hover {
-    transform: scale(1.1);
+    transform: translateY(-1px);
+    opacity: 1;
 }
 
 .menuoption.active::after,
@@ -78,7 +82,6 @@
 }
 
 .menuoption.active {
-    opacity: 1;
     cursor: default;
 }
 
@@ -87,10 +90,11 @@
     gap: 6px;
     margin-left: auto;
     order: 3;
+    align-items: center;
 }
 
 .lang-toggle button {
-    padding: 4px 6px;
+    padding: 2px 4px;
     border: none;
     border-radius: 6px;
     background: transparent;
@@ -108,8 +112,8 @@
 }
 
 .lang-toggle img {
-    width: 35px;
-    height: 23px;
+    width: 32px;
+    height: 21px;
     object-fit: fill;
     border-radius: 2px;
 }
@@ -120,4 +124,19 @@
 
 .lang-toggle button:hover:not(.active) img {
     transform: scale(1.1);
+}
+
+@media (max-width: 900px) {
+    .topbar {
+        gap: 20px;
+    }
+
+    .divider.vertical {
+        display: none;
+    }
+
+    .lang-toggle {
+        width: 100%;
+        justify-content: flex-end;
+    }
 }

@@ -28,30 +28,28 @@
     </div>
     <div class="focus">
       <div class="intro"> 
-          <h2 data-i18n="intro1">Welcome to the AI Playground</h2>
-          <p data-i18n="intro2"> A space where you can explore and interact with different AI models.</p>
-          <p data-i18n="intro3">Click a card to learn more and try it out.</p>
+          <p class="intro-kicker" data-i18n="introKicker">Learn AI by trying it</p>
+          <h2 data-i18n="intro1">Try different kinds of AI</h2>
+          <p class="intro-lead" data-i18n="intro2">Pick a card below to explore how each one works.</p>
       </div>
       <div class="cards-row">
-        <div class="card" id="slot-left">
+        <div class="card card-step card-step-active" id="slot-left">
+          <div class="card-step-badge" aria-hidden="true">1</div>
           <h2 data-i18n="rulesTitle">Rule-based AI</h2>
           <p data-i18n="rulesText">It never guesses - it only follows rules.</p>
           <button id="start-rule-based"class="start-btn">Start</button>
         </div>
-        <div class="card locked" id="slot-center">
+        <div class="card locked card-step card-step-next" id="slot-center">
+          <div class="card-step-badge" aria-hidden="true">2</div>
           <h2 data-i18n="classifierTitle">Image classifier</h2>
           <p data-i18n="classifierText">It's very good at spotting patterns in pictures.</p>
           <button id="start-image-classifier" class="start-btn" hidden>Start</button>
         </div>
-        <div class="card locked" id="slot-right">
-          <h2 data-i18n="chatbotTitle">Chatbot</h2>
+        <div class="card locked card-step card-step-locked" id="slot-right">
+          <div class="card-step-badge" aria-hidden="true">3</div>
+          <h2 data-i18n="chatbotTitle">Vision Chat</h2>
           <p data-i18n="chatbotText">It sounds smart and confident.</p>
         </div>
-      </div>
-      <div class="cards-progress" aria-hidden="true">
-        <div class="progress-step">1</div>
-        <div class="progress-step">2</div>
-        <div class="progress-step">3</div>
       </div>
     </div>
     
