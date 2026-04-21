@@ -72,6 +72,7 @@
 }
 
 .home-screen {
+    position: relative;
     flex: 0 0 33.333333%;
     min-width: 33.333333%;
     min-height: 100vh;
@@ -156,10 +157,91 @@
 
 #session-menu-group {
     width: min(780px, calc(100% - 40px));
+    position: relative;
+    z-index: 2;
 }
 
 #session-menu {
     margin-top: 0;
+}
+
+.menu-doodles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.menu-doodle {
+    position: absolute;
+    width: clamp(120px, 11vw, 168px);
+    aspect-ratio: 1;
+    border: 3px solid rgba(74, 78, 105, 0.28);
+    border-radius: 28px;
+    background: rgba(246, 246, 246, 0.32);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.52),
+        0 16px 34px rgba(74, 78, 105, 0.08);
+    backdrop-filter: blur(2px);
+    opacity: 0.78;
+}
+
+.menu-doodle::before {
+    content: "";
+    position: absolute;
+    inset: 8px;
+    border: 2px solid rgba(74, 78, 105, 0.14);
+    border-radius: 20px;
+    pointer-events: none;
+}
+
+.menu-doodle-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.menu-doodle-bee {
+    top: 14%;
+    left: 6%;
+    transform: rotate(-7deg);
+}
+
+.menu-doodle-crocodile {
+    top: 22%;
+    right: 7%;
+    transform: rotate(6deg);
+}
+
+.menu-doodle-fish {
+    top: 49%;
+    left: 8%;
+    transform: rotate(8deg);
+}
+
+.menu-doodle-frog {
+    top: 59%;
+    right: 5%;
+    transform: rotate(-5deg);
+}
+
+.menu-doodle-hockey {
+    bottom: 10%;
+    left: 14%;
+    transform: rotate(-9deg);
+}
+
+.menu-doodle-house {
+    bottom: 17%;
+    right: 15%;
+    transform: rotate(10deg);
+}
+
+.menu-doodle-monalisa {
+    top: 35%;
+    right: 17%;
+    width: clamp(132px, 12vw, 178px);
+    transform: rotate(-3deg);
 }
 
 #session-menu .menu-entry-content {
@@ -605,6 +687,10 @@
     .credits-intro,
     .credits-panel {
         width: 100%;
+    }
+
+    .menu-doodles {
+        display: none;
     }
 
     #credits-menu-group,

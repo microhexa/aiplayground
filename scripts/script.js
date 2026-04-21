@@ -13,6 +13,9 @@ const SKIP_HOME_TRANSITION_KEY = "skipHomeTransition";
 const HOME_QUIZ_DATASET = "./images/full_binary_house.bin";
 const HOME_QUIZ_DRAWING_INDEXES = [2, 61];
 const HOME_QUIZ_CORRECT_ANSWER = "house";
+const MENU_DOODLE_BASE_PATH = "./images/menu-doodles";
+const MENU_DOODLE_MIN_DURATION = 1400;
+const MENU_DOODLE_PAUSE = 650;
 
 const currentPath = window.location.pathname;
 const isHomePage = currentPath.endsWith("index.html") || currentPath.endsWith("/");
@@ -43,12 +46,16 @@ const quizQuestion = document.getElementById("micro-quiz-question");
 const quizCanvas = document.getElementById("micro-quiz-canvas");
 const quizFeedback = document.getElementById("micro-quiz-feedback");
 const quizOptionButtons = Array.from(document.querySelectorAll(".micro-quiz-option"));
+const menuDoodleCanvases = Array.from(document.querySelectorAll(".menu-doodle-canvas"));
 
 let homeMenuMode = sessionStorage.getItem(HOME_SCREEN_KEY) || SESSION_MENU_MODE;
 let homeQuizStep = 0;
 let homeQuizDrawings = [];
 let homeQuizLoaded = false;
 let homeQuizLoadingPromise = null;
+let menuDoodleAnimationFrame = null;
+const menuDoodleState = [];
+const menuDoodleCache = new Map();
 const shouldSkipInitialHomeTransition = sessionStorage.getItem(SKIP_HOME_TRANSITION_KEY) === "true";
 
 if (shouldSkipInitialHomeTransition) {
@@ -217,6 +224,198 @@ function drawQuickDrawToCanvas(canvas, drawing) {
 
         ctx.stroke();
     });
+}
+
+function getMenuDoodleDuration(drawing) {
+    let maxTimestamp = 0;
+
+    drawing.forEach(stroke => {
+        const timestamps = stroke[2] || [];
+        const lastPointTimestamp = timestamps[timestamps.length - 1] || 0;
+        if (lastPointTimestamp > maxTimestamp) {
+            maxTimestamp = lastPointTimestamp;
+        }
+    });
+
+    return {
+        maxTimestamp,
+        playbackDuration: Math.max(maxTimestamp, MENU_DOODLE_MIN_DURATION),
+    };
+}
+
+function drawMenuDoodleFrame(canvas, drawing, elapsed) {
+    if (!canvas || !drawing) return;
+
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const points = [];
+    drawing.forEach(stroke => {
+        const xs = stroke[0] || [];
+        const ys = stroke[1] || [];
+        for (let index = 0; index < xs.length; index++) {
+            points.push({ x: xs[index], y: ys[index] });
+        }
+    });
+
+    if (!points.length) return;
+
+    const minX = Math.min(...points.map(point => point.x));
+    const maxX = Math.max(...points.map(point => point.x));
+    const minY = Math.min(...points.map(point => point.y));
+    const maxY = Math.max(...points.map(point => point.y));
+    const boxWidth = Math.max(1, maxX - minX);
+    const boxHeight = Math.max(1, maxY - minY);
+    const padding = 24;
+    const drawableWidth = canvas.width - padding * 2;
+    const drawableHeight = canvas.height - padding * 2;
+    const scale = Math.min(drawableWidth / boxWidth, drawableHeight / boxHeight);
+    const offsetX = (canvas.width - boxWidth * scale) / 2;
+    const offsetY = (canvas.height - boxHeight * scale) / 2;
+
+    ctx.strokeStyle = "rgba(27, 38, 49, 0.88)";
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.lineWidth = 4;
+
+    drawing.forEach(stroke => {
+        const xs = stroke[0] || [];
+        const ys = stroke[1] || [];
+        const timestamps = stroke[2] || [];
+
+        if (!xs.length || !ys.length) return;
+
+        let lastVisibleIndex = 0;
+        while (
+            lastVisibleIndex + 1 < xs.length &&
+            (timestamps[lastVisibleIndex + 1] || 0) <= elapsed
+        ) {
+            lastVisibleIndex += 1;
+        }
+
+        if ((timestamps[0] || 0) > elapsed) return;
+
+        ctx.beginPath();
+        ctx.moveTo(
+            offsetX + (xs[0] - minX) * scale,
+            offsetY + (ys[0] - minY) * scale
+        );
+
+        for (let index = 1; index <= lastVisibleIndex; index++) {
+            ctx.lineTo(
+                offsetX + (xs[index] - minX) * scale,
+                offsetY + (ys[index] - minY) * scale
+            );
+        }
+
+        if (lastVisibleIndex < xs.length - 1) {
+            const segmentStartTime = timestamps[lastVisibleIndex] || 0;
+            const segmentEndTime = timestamps[lastVisibleIndex + 1] || segmentStartTime;
+            const segmentDuration = Math.max(1, segmentEndTime - segmentStartTime);
+            const segmentProgress = Math.max(
+                0,
+                Math.min(1, (elapsed - segmentStartTime) / segmentDuration)
+            );
+            const currentX = xs[lastVisibleIndex] + (xs[lastVisibleIndex + 1] - xs[lastVisibleIndex]) * segmentProgress;
+            const currentY = ys[lastVisibleIndex] + (ys[lastVisibleIndex + 1] - ys[lastVisibleIndex]) * segmentProgress;
+
+            ctx.lineTo(
+                offsetX + (currentX - minX) * scale,
+                offsetY + (currentY - minY) * scale
+            );
+        }
+
+        ctx.stroke();
+    });
+}
+
+async function loadMenuDoodleSet(name) {
+    if (menuDoodleCache.has(name)) {
+        return menuDoodleCache.get(name);
+    }
+
+    const response = await fetch(`${MENU_DOODLE_BASE_PATH}/${name}.json`);
+    if (!response.ok) {
+        throw new Error(`Could not load doodle set: ${name}`);
+    }
+
+    const payload = await response.json();
+    const drawings = Array.isArray(payload.drawings) ? payload.drawings : [];
+    menuDoodleCache.set(name, drawings);
+    return drawings;
+}
+
+function startMenuDoodleAnimation() {
+    if (!menuDoodleState.length || menuDoodleAnimationFrame) return;
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const render = now => {
+        menuDoodleState.forEach(state => {
+            const drawingEntry = state.drawings[state.index];
+            if (!drawingEntry) return;
+
+            const drawing = drawingEntry.drawing;
+            const { maxTimestamp, playbackDuration } = getMenuDoodleDuration(drawing);
+
+            if (state.startedAt === null) {
+                state.startedAt = now;
+            }
+
+            const cycleElapsed = now - state.startedAt;
+            const effectiveElapsed = prefersReducedMotion
+                ? maxTimestamp
+                : Math.min(
+                    maxTimestamp,
+                    (Math.min(cycleElapsed, playbackDuration) / playbackDuration) * maxTimestamp
+                );
+
+            drawMenuDoodleFrame(state.canvas, drawing, effectiveElapsed);
+
+            if (cycleElapsed >= playbackDuration + MENU_DOODLE_PAUSE) {
+                state.index = (state.index + 1) % state.drawings.length;
+                state.startedAt = now;
+            }
+        });
+
+        menuDoodleAnimationFrame = window.requestAnimationFrame(render);
+    };
+
+    menuDoodleAnimationFrame = window.requestAnimationFrame(render);
+}
+
+async function initializeMenuDoodles() {
+    if (!isHomePage || !menuDoodleCanvases.length) return;
+
+    let doodleSets = [];
+
+    try {
+        doodleSets = await Promise.all(
+            menuDoodleCanvases.map(async (canvas, index) => {
+                const source = canvas.dataset.source;
+                if (!source) return null;
+
+                const drawings = await loadMenuDoodleSet(source);
+                if (!drawings.length) return null;
+
+                return {
+                    canvas,
+                    drawings,
+                    index: index % drawings.length,
+                    startedAt: null,
+                };
+            })
+        );
+    } catch (error) {
+        console.error(error);
+        return;
+    }
+
+    doodleSets.filter(Boolean).forEach(state => {
+        menuDoodleState.push(state);
+    });
+
+    startMenuDoodleAnimation();
 }
 
 function renderHomeQuizStep() {
@@ -576,6 +775,7 @@ if (returnBtn) {
 updatePageMeta();
 updateLanguageButtons();
 applyTranslations();
+void initializeMenuDoodles();
 
 if (isHomePage) {
     if (homeScreens && shouldSkipInitialHomeTransition) {
