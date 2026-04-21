@@ -28,19 +28,23 @@
 .home-focus {
     position: relative;
     min-height: 100vh;
+    height: 100vh;
     align-items: center;
     justify-content: center;
     max-width: 1400px;
     padding: 72px 32px 48px;
+    overflow: hidden;
 }
 
 .home-page .page {
+    height: 100vh;
     overflow: hidden;
 }
 
 .home-page .page-shell {
     position: relative;
     min-height: 100vh;
+    height: 100vh;
     display: block;
 }
 
@@ -155,11 +159,14 @@
 
 @media (max-width: 900px) {
     .home-page .page {
+        height: auto;
         overflow: visible;
     }
 
     .home-focus {
         min-height: auto;
+        height: auto;
+        overflow: visible;
         padding: 112px 20px 36px;
     }
 

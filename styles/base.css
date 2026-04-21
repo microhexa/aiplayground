@@ -26,6 +26,8 @@ body {
 
 .home-page {
     background: #f8c291;
+    height: 100vh;
+    overflow: hidden;
 }
 
 .sr-only {
