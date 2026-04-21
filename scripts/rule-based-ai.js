@@ -8,10 +8,11 @@ if (quizCanvas) {
   const aiAnswerValueEl = document.getElementById("ai-answer-value");
   const playerAnswerValueEl = document.getElementById("player-answer-value");
   const aiAnswerRepeatEl = document.getElementById("ai-answer-repeat");
-  const stopwatchValueEl = document.getElementById("stopwatch-value");
+  const countdownFillEl = document.getElementById("countdown-fill");
   const nextRoundBtn = document.getElementById("next-round-btn");
 
   const DATASET_LIMIT = 80;
+  const ROUND_DURATION_MS = 7000;
   const DATASETS = [
     { labelKey: "labelSun", path: "./images/full_binary_sun.bin" },
     { labelKey: "labelHouse", path: "./images/full_binary_house.bin" },
@@ -20,7 +21,7 @@ if (quizCanvas) {
 
   let samplePool = [];
   let currentRound = null;
-  let roundTimerId = null;
+  let countdownFrameId = null;
   let roundStartedAt = 0;
 
   const builtInRules = [
@@ -63,10 +64,12 @@ if (quizCanvas) {
     if (!currentRound) return;
 
     if (currentRound.answered) {
-      playerAnswerValueEl.textContent = t(currentRound.playerAnswer);
+      playerAnswerValueEl.textContent = currentRound.playerAnswer ? t(currentRound.playerAnswer) : "-";
       aiAnswerValueEl.textContent = t(currentRound.aiAnswer);
       aiAnswerRepeatEl.textContent = t(currentRound.aiAnswer);
-      playerStatusEl.textContent = currentRound.playerAnswer === currentRound.aiAnswer
+      playerStatusEl.textContent = !currentRound.playerAnswer
+        ? t("rulesPlayerTooSlow")
+        : currentRound.playerAnswer === currentRound.aiAnswer
         ? t("rulesPlayerMatched")
         : t("rulesPlayerDiffered");
       aiStatusEl.textContent = t("rulesAiReveal");
@@ -334,28 +337,44 @@ if (quizCanvas) {
     return classifyByRules(extractFeatures(normalizedCtx, 64, 64));
   }
 
-  function formatElapsed(ms) {
-    const totalSeconds = ms / 1000;
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = Math.floor(totalSeconds % 60);
-    const tenths = Math.floor((ms % 1000) / 100);
-    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}.${tenths}`;
+  function setCountdownProgress(progress) {
+    if (!countdownFillEl) return;
+    const clamped = Math.max(0, Math.min(1, progress));
+    countdownFillEl.style.transform = `scaleX(${clamped})`;
+    countdownFillEl.style.opacity = clamped < 0.2 ? "0.72" : "1";
   }
 
-  function stopTimer() {
-    if (roundTimerId) {
-      window.clearInterval(roundTimerId);
-      roundTimerId = null;
+  function stopCountdown() {
+    if (countdownFrameId) {
+      window.cancelAnimationFrame(countdownFrameId);
+      countdownFrameId = null;
     }
   }
 
-  function startTimer() {
-    stopTimer();
+  function startCountdown() {
+    stopCountdown();
     roundStartedAt = Date.now();
-    stopwatchValueEl.textContent = formatElapsed(0);
-    roundTimerId = window.setInterval(() => {
-      stopwatchValueEl.textContent = formatElapsed(Date.now() - roundStartedAt);
-    }, 100);
+    setCountdownProgress(1);
+
+    const tick = () => {
+      if (!currentRound || currentRound.answered) {
+        stopCountdown();
+        return;
+      }
+
+      const elapsed = Date.now() - roundStartedAt;
+      const remainingRatio = 1 - elapsed / ROUND_DURATION_MS;
+      setCountdownProgress(remainingRatio);
+
+      if (elapsed >= ROUND_DURATION_MS) {
+        revealRound(null);
+        return;
+      }
+
+      countdownFrameId = window.requestAnimationFrame(tick);
+    };
+
+    countdownFrameId = window.requestAnimationFrame(tick);
   }
 
   function resetRoundUi() {
@@ -369,6 +388,7 @@ if (quizCanvas) {
     playerAnswerValueEl.textContent = "-";
     aiAnswerRepeatEl.textContent = "-";
     nextRoundBtn.hidden = true;
+    setCountdownProgress(1);
   }
 
   function chooseRandomSample() {
@@ -389,7 +409,7 @@ if (quizCanvas) {
 
     drawQuickDraw(sample.drawing);
     resetRoundUi();
-    startTimer();
+    startCountdown();
   }
 
   function revealRound(playerAnswer) {
@@ -397,7 +417,7 @@ if (quizCanvas) {
 
     currentRound.playerAnswer = playerAnswer;
     currentRound.answered = true;
-    stopTimer();
+    stopCountdown();
 
     answerButtons.forEach(button => {
       button.disabled = true;
@@ -407,11 +427,13 @@ if (quizCanvas) {
       button.classList.toggle("incorrect", answerKey === playerAnswer && playerAnswer !== currentRound.aiAnswer);
     });
 
-    playerAnswerValueEl.textContent = t(playerAnswer);
+    playerAnswerValueEl.textContent = playerAnswer ? t(playerAnswer) : "-";
     aiAnswerValueEl.textContent = t(currentRound.aiAnswer);
     aiAnswerRepeatEl.textContent = t(currentRound.aiAnswer);
     aiStatusEl.textContent = t("rulesAiReveal");
-    playerStatusEl.textContent = playerAnswer === currentRound.aiAnswer
+    playerStatusEl.textContent = !playerAnswer
+      ? t("rulesPlayerTooSlow")
+      : playerAnswer === currentRound.aiAnswer
       ? t("rulesPlayerMatched")
       : t("rulesPlayerDiffered");
     nextRoundBtn.hidden = false;
